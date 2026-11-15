@@ -20,12 +20,12 @@ The core idea is to explore the *temporal structure* between superposition and a
 
 Вы можете протестировать математическую модель в реальном времени прямо в браузере без установки дополнительного ПО:
 
-* 🚀 **[Запустить интерактивный стенд МЦИ (GitHub Pages)](https://github.io)**
+* 🚀 **[Запустить интерактивный стенд МЦИ (GitHub Pages)](https://vasiliypavlov.github.io/predelayed-stabilization/)**
 * 📄 **[Исходный код симулятора (`index.html`)](index.html)** — автономное однофайловое приложение (HTML5 Canvas + Vanilla JS), позволяющее варьировать $\tau_{\text{stab}}$, базовое время контура $T_0$ (платформы `Si₃N₄`, `SOI` и `4f`-стенд), фазу $\varphi$, видность $V$, сдвиги указателей $\delta x/\sigma$, инверсию знака и дробовой шум на статистике до $10^{10}$ фотонов.
 
 You can explore the mathematical model in real time directly in your browser with zero server-side dependencies:
 
-* 🚀 **[Launch Interactive MZI Simulator (GitHub Pages)](https://github.io)**
+* 🚀 **[Launch Interactive MZI Simulator (GitHub Pages)](https://vasiliypavlov.github.io/predelayed-stabilization/)**
 * 📄 **[Simulator Source Code (`index.html`)](index.html)** — standalone single-file application (HTML5 Canvas + Vanilla JS) supporting parameter sweeps over $\tau_{\text{stab}}$, baseline loop transit time $T_0$ (`Si₃N₄`, `SOI`, and `4f` free-space platforms), phase $\varphi$, visibility $V$, pointer displacements $\delta x/\sigma$, single-axis sign inversion, and Monte Carlo shot-noise simulation up to $10^{10}$ photons.
 
 ---
@@ -47,12 +47,14 @@ Prior to final detection, phase-coherent evolutionary branches may temporarily c
 ## 📄 Файлы / Files
 
 ### 🇷🇺 Русскоязычные материалы
-- **[Основной препринт](paper/predelayed_stabilization_core_preprint_ru.md)** — научная формулировка гипотезы, CPTP-модель, расчёт статистики фотонов и описание эксперимента.
-- **[Интерактивный симулятор](index.html)** — веб-приложение для моделирования режимов задержки (Mode I и Mode II Null Control).
+
+* **[Основной препринт](paper/predelayed_stabilization_core_preprint_ru.md)** — научная формулировка гипотезы, CPTP-модель, расчёт статистики фотонов и описание эксперимента.
+* **[Интерактивный симулятор](index.html)** — веб-приложение для моделирования режимов задержки (Mode I и Mode II Null Control).
 
 ### 🇺🇸 English materials
-- **[Core Preprint](paper/predelayed_stabilization_core_preprint_en.md)** — scientific formulation of the hypothesis, CPTP channel model, photon budget analysis, and experimental proposal.
-- **[Interactive Simulator](index.html)** — standalone browser-based testbed for simulating delay regimes (Mode I and Mode II Null Control).
+
+* **[Core Preprint](paper/predelayed_stabilization_core_preprint_en.md)** — scientific formulation of the hypothesis, CPTP channel model, photon budget analysis, and experimental proposal.
+* **[Interactive Simulator](index.html)** — standalone browser-based testbed for simulating delay regimes (Mode I and Mode II Null Control).
 
 ---
 
@@ -61,14 +63,16 @@ Prior to final detection, phase-coherent evolutionary branches may temporarily c
 Гипотеза приводит к фальсифицируемому предсказанию: **короткоживущие избыточные корреляции второго порядка $\Delta C(\Delta t) = C(\Delta t) - C_{\text{QM}}(\varphi, V)$ между ортогональными пространственными указателями $(x, y)$ одиночного фотона до рекомбинации на выходном светоделителе $\text{BS}_2$.**
 
 Протокол эксперимента описан в Основном препринте и включает две архитектуры:
+
 1. **Наносекундный диапазон ($\tau_{\text{stab}} \gtrsim 2\text{ нс}$):** сбалансированный интерферометр Маха–Цендера в свободном пространстве с $4f$-ретранслирующими телескопическими линиями задержки, наклонными стеклянными пластинами слабого сдвига $(\delta x, \delta y)$ и координатно-чувствительной $2\text{D}$-SPAD-матрицей.
-2. **Пикосекундный диапазон ($\tau_{\text{stab}} \sim 1\text{--}100\text{ пс}$):** многомодовый интегрально-фотонный интерферометр на чипе ($\text{Si}_3\text{N}_4$ / SOI) с использованием ортогональных волноводных мод $\text{TE}_{10}$ и $\text{TE}_{01}$.
+2. **Пикосекундный диапазон ($\tau_{\text{stab}} \sim 1\text{--}100\text{ пс}$):** многомодовый интегрально-фотонный интерферометр на чипе (`Si₃N₄` / `SOI`) с использованием ортогональных волноводных мод $\text{TE}_{10}$ и $\text{TE}_{01}$.
 
 The hypothesis leads to a falsifiable prediction: **transient second-order excess correlations $\Delta C(\Delta t) = C(\Delta t) - C_{\text{QM}}(\varphi, V)$ between orthogonal transverse spatial pointers $(x, y)$ of a single photon prior to recombination at the output beam splitter $\text{BS}_2$.**
 
 The experimental protocol is detailed in the Core Preprint across two platforms:
+
 1. **Nanosecond regime ($\tau_{\text{stab}} \gtrsim 2\text{ ns}$):** a balanced free-space Mach–Zehnder interferometer featuring $4f$-relayed optical delay lines, tilted plane-parallel glass plates for polarization-independent shifts $(\delta x, \delta y)$, and a position-sensitive $2\text{D}$ SPAD array.
-2. **Picosecond regime ($\tau_{\text{stab}} \sim 1\text{--}100\text{ ps}$):** a multimode integrated-photonic chip MZI ($\text{Si}_3\text{N}_4$ / SOI) utilizing orthogonal waveguide modes $\text{TE}_{10}$ and $\text{TE}_{01}$.
+2. **Picosecond regime ($\tau_{\text{stab}} \sim 1\text{--}100\text{ ps}$):** a multimode integrated-photonic chip MZI (`Si₃N₄` / `SOI`) utilizing orthogonal waveguide modes $\text{TE}_{10}$ and $\text{TE}_{01}$.
 
 ---
 
@@ -84,5 +88,5 @@ The experimental protocol is detailed in the Core Preprint across two platforms:
 
 **Author:** Vasiliy Pavlov
 
-* **Research papers and documentation (`paper/`, PDF):** licensed under [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)]([https://creativecommons.org](https://creativecommons.org/licenses/by-nc-sa/4.0/).
-* **Interactive simulator source code (`index.html`):** licensed under the [MIT License]([https://opensource.org](https://opensource.org/license/mit).
+* **Research papers and documentation (`paper/`, PDF):** licensed under [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/).
+* **Interactive simulator source code (`index.html`):** licensed under the [MIT License](https://opensource.org/license/mit).
