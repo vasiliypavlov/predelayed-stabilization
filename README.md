@@ -1,6 +1,6 @@
 # Отложенная стабилизация в квантовом измерении / Delayed Stabilization in Quantum Measurement
 
-[![DOI](https://zenodo.org)](https://zenodo.org/records/24252176)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.24252176-blue.svg)](https://doi.org/10.5281/zenodo.24252176)
 [Interactive Simulator](https://vasiliypavlov.github.io/predelayed-stabilization/)
 
 **Открытая исследовательская гипотеза и предложение эксперимента**
