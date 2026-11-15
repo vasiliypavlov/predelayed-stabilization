@@ -1,7 +1,6 @@
 # Отложенная стабилизация в квантовом измерении / Delayed Stabilization in Quantum Measurement
 
-[![License: CC BY-NC-SA 4.0](https://shields.io)](https://creativecommons.org)
-[![Interactive Simulator](https://vasiliypavlov.github.io/predelayed-stabilization/)](https://vasiliypavlov.github.io/predelayed-stabilization/)
+[Interactive Simulator](https://vasiliypavlov.github.io/predelayed-stabilization/)
 
 **Открытая исследовательская гипотеза и предложение эксперимента**
 
@@ -85,5 +84,5 @@ The experimental protocol is detailed in the Core Preprint across two platforms:
 
 **Author:** Vasiliy Pavlov
 
-* **Research papers and documentation (`paper/`, PDF):** licensed under [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)](https://creativecommons.org).
-* **Interactive simulator source code (`index.html`):** licensed under the [MIT License](https://opensource.org).
+* **Research papers and documentation (`paper/`, PDF):** licensed under [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)]([https://creativecommons.org](https://creativecommons.org/licenses/by-nc-sa/4.0/).
+* **Interactive simulator source code (`index.html`):** licensed under the [MIT License]([https://opensource.org](https://opensource.org/license/mit).
