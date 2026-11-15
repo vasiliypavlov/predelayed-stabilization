@@ -1,7 +1,7 @@
 # Отложенная стабилизация в квантовом измерении / Delayed Stabilization in Quantum Measurement
 
-[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.24252176-blue.svg)](https://doi.org/10.5281/zenodo.24252176)
-[Interactive Simulator](https://vasiliypavlov.github.io/predelayed-stabilization/)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24252176.svg)](https://doi.org/10.5281/zenodo.24252176)
+[![Interactive Demo](https://img.shields.io/badge/Interactive_Demo-Open_Web_App-blue?style=for-the-badge&logo=googlechrome&logoColor=white)](https://vasiliypavlov.github.io/predelayed-stabilization/)
 
 **Открытая исследовательская гипотеза и предложение эксперимента**
 
