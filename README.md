@@ -90,14 +90,3 @@ The experimental protocol is detailed in the Core Preprint across two platforms:
 
 * **Research papers and documentation (`paper/`, PDF):** licensed under [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/).
 * **Interactive simulator source code (`index.html`):** licensed under the [MIT License](https://opensource.org/license/mit).
-
-@misc{pavlov2026stabilization,
-  author       = {Pavlov, Vasiliy},
-  title        = {Delayed Stabilization in Quantum Measurement: A Phenomenological Hypothesis and an Interferometric Test},
-  year         = {2026},
-  month        = {nov},
-  publisher    = {Zenodo},
-  version      = {v1},
-  doi          = {10.5281/zenodo.24252176},
-  url          = {https://doi.org}
-}
