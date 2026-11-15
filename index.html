@@ -1,0 +1,2196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MZI Weak-Measurement Testbed — Delayed Stabilization Simulator</title>
+  <style>
+    :root {
+      --bg-canvas: #07090e;
+      --bg-panel: #0d121c;
+      --bg-surface: #131a28;
+      --bg-hover: #1a2335;
+      --border: #1e293b;
+      --border-strong: #334155;
+      --text-primary: #e2e8f0;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent-cyan: #06b6d4;
+      --accent-cyan-dim: rgba(6, 182, 212, 0.14);
+      --accent-amber: #f59e0b;
+      --accent-amber-dim: rgba(245, 158, 11, 0.14);
+      --accent-emerald: #10b981;
+      --accent-emerald-dim: rgba(16, 185, 129, 0.14);
+      --accent-rose: #f43f5e;
+      --accent-rose-dim: rgba(244, 63, 94, 0.14);
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      background-color: var(--bg-canvas);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 14px 24px;
+      background-color: var(--bg-panel);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .brand-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .brand-title {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+      white-space: nowrap;
+    }
+
+    .brand-sub {
+      font-size: 12px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .segmented {
+      display: inline-flex;
+      background-color: var(--bg-canvas);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2px;
+      gap: 2px;
+    }
+
+    .segmented button {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .segmented button:hover {
+      color: var(--text-primary);
+    }
+
+    .segmented button.active {
+      background-color: var(--bg-surface);
+      color: var(--accent-cyan);
+      box-shadow: inset 0 0 0 1px var(--border-strong);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 500;
+      border-radius: 6px;
+      border: 1px solid var(--border-strong);
+      background-color: var(--bg-surface);
+      color: var(--text-primary);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .btn:hover {
+      background-color: var(--bg-hover);
+      border-color: #475569;
+    }
+
+    .btn-primary {
+      background-color: #0891b2;
+      border-color: #06b6d4;
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background-color: #0e7490;
+    }
+
+    .btn-mini {
+      padding: 3px 8px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+    }
+
+    /* Main Workspace Layout */
+    .workspace {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 20px;
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 20px 24px 32px;
+      align-items: start;
+    }
+
+    @media (max-width: 1080px) {
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Controls Sidebar */
+    .controls-panel {
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .control-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .control-section:last-child {
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      letter-spacing: 0.02em;
+    }
+
+    .preset-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .preset-btn {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 7px 6px;
+      color: var(--text-secondary);
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s ease;
+    }
+
+    .preset-btn:hover {
+      color: var(--text-primary);
+      border-color: var(--border-strong);
+    }
+
+    .preset-btn.active {
+      background-color: var(--accent-cyan-dim);
+      border-color: var(--accent-cyan);
+      color: #67e8f9;
+    }
+
+    .preset-btn span {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .preset-btn.active span {
+      color: #a5f3fc;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .field-label {
+      font-size: 12px;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .field-value-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .field-value {
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+      font-size: 12px;
+      color: var(--accent-cyan);
+      font-weight: 500;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 5px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      border: 2px solid var(--bg-panel);
+      box-shadow: 0 0 0 1px rgba(6, 182, 212, 0.5);
+      cursor: pointer;
+      transition: transform 0.1s ease;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.12);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      border: 2px solid var(--bg-panel);
+      cursor: pointer;
+    }
+
+    .range-bounds {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .toggle-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .toggle-group.three {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .toggle-btn {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 7px 8px;
+      color: var(--text-secondary);
+      font-size: 11.5px;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: all 0.15s ease;
+    }
+
+    .toggle-btn:hover {
+      color: var(--text-primary);
+      border-color: var(--border-strong);
+    }
+
+    .toggle-btn.active-cyan {
+      background-color: var(--accent-cyan-dim);
+      border-color: var(--accent-cyan);
+      color: #67e8f9;
+    }
+
+    .toggle-btn.active-amber {
+      background-color: var(--accent-amber-dim);
+      border-color: var(--accent-amber);
+      color: #fcd34d;
+    }
+
+    .toggle-btn.active-emerald {
+      background-color: var(--accent-emerald-dim);
+      border-color: var(--accent-emerald);
+      color: #6ee7b7;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .checkbox-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-primary);
+      cursor: pointer;
+    }
+
+    .checkbox-label input[type="checkbox"] {
+      width: 15px;
+      height: 15px;
+      accent-color: var(--accent-cyan);
+      cursor: pointer;
+    }
+
+    /* Right Visualization Column */
+    .stage-column {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    /* Telemetry Strip */
+    .telemetry-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+    }
+
+    .metric-card {
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .metric-label {
+      font-size: 11px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .metric-val {
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+    }
+
+    .metric-sub {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .status-card.detectable {
+      border-color: rgba(16, 185, 129, 0.45);
+      background-color: rgba(16, 185, 129, 0.06);
+    }
+    .status-card.detectable .metric-val {
+      color: #34d399;
+      font-size: 13.5px;
+      line-height: 1.3;
+    }
+
+    .status-card.marginal {
+      border-color: rgba(245, 158, 11, 0.45);
+      background-color: rgba(245, 158, 11, 0.06);
+    }
+    .status-card.marginal .metric-val {
+      color: #fbbf24;
+      font-size: 13.5px;
+      line-height: 1.3;
+    }
+
+    .status-card.suppressed {
+      border-color: rgba(244, 63, 94, 0.45);
+      background-color: rgba(244, 63, 94, 0.06);
+    }
+    .status-card.suppressed .metric-val {
+      color: #fb7185;
+      font-size: 13.5px;
+      line-height: 1.3;
+    }
+
+    /* Canvas Panels */
+    .canvas-card {
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .canvas-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 11px 16px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .canvas-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .canvas-subtitle {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .canvas-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+    .schematic-wrap {
+      height: 235px;
+    }
+
+    .plot-wrap {
+      height: 410px;
+      cursor: crosshair;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .crosshair-hud {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      background-color: rgba(13, 18, 28, 0.92);
+      border: 1px solid var(--border-strong);
+      border-radius: 6px;
+      padding: 8px 11px;
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+      font-size: 11px;
+      color: var(--text-primary);
+      pointer-events: none;
+      display: none;
+      min-width: 188px;
+      line-height: 1.55;
+    }
+
+    .crosshair-hud.visible {
+      display: block;
+    }
+
+    .legend-bar {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 10px 16px;
+      border-top: 1px solid var(--border);
+      font-size: 11.5px;
+      color: var(--text-secondary);
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      white-space: nowrap;
+    }
+
+    .swatch {
+      width: 18px;
+      height: 2px;
+      display: inline-block;
+    }
+
+    .swatch-dashed {
+      border-top: 2px dashed #94a3b8;
+      height: 0;
+    }
+
+    .swatch-cyan {
+      background-color: var(--accent-cyan);
+    }
+
+    .swatch-amber {
+      background-color: var(--accent-amber);
+    }
+
+    .swatch-band {
+      width: 14px;
+      height: 10px;
+      background-color: rgba(6, 182, 212, 0.18);
+      border: 1px solid rgba(6, 182, 212, 0.45);
+      border-radius: 2px;
+    }
+
+    .footer-note {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      padding: 4px 2px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+  </style>
+<script src="/_aistudio-iframe.js?v=1f94f900"></script></head>
+<body>
+  <header class="topbar">
+    <div class="brand-group">
+      <div class="brand-title" data-i18n="appTitle">Испытательный стенд МЦИ со слабыми измерениями</div>
+      <div class="brand-sub" data-i18n="appSubtitle">Феноменологический симулятор: Delayed Stabilization in Quantum Measurement</div>
+    </div>
+
+    <div class="topbar-actions">
+      <div class="segmented" role="group" aria-label="Language switch">
+        <button type="button" id="lang-ru" class="active">RU</button>
+        <button type="button" id="lang-en">EN</button>
+      </div>
+
+      <div class="segmented" role="group" aria-label="PNG export theme">
+        <button type="button" id="png-dark" class="active" data-i18n="pngDark">PNG: Тёмный</button>
+        <button type="button" id="png-light" data-i18n="pngLight">PNG: Белый</button>
+      </div>
+
+      <button type="button" id="btn-export-png" class="btn btn-primary" data-i18n="exportPng">Export PNG</button>
+      <button type="button" id="btn-export-csv" class="btn" data-i18n="exportCsv">Export CSV</button>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <!-- Left Parameter Console -->
+    <aside class="controls-panel">
+      <!-- Platform & T0 -->
+      <section class="control-section">
+        <div class="section-title" data-i18n="secPlatform">1. Оптическая платформа и базовое время T₀</div>
+        <div class="preset-grid">
+          <button type="button" class="preset-btn" data-t0="0.015" data-platform="si3n4">
+            Si₃N₄ Chip<span>0.015 ns</span>
+          </button>
+          <button type="button" class="preset-btn" data-t0="0.127" data-platform="soi">
+            SOI Chip<span>0.127 ns</span>
+          </button>
+          <button type="button" class="preset-btn active" data-t0="2.500" data-platform="4f">
+            4f Bench<span>2.500 ns</span>
+          </button>
+        </div>
+
+        <div class="field">
+          <div class="field-header">
+            <label class="field-label" for="ctrl-t0" data-i18n="lblT0">Базовое время контура T₀</label>
+            <span class="field-value" id="val-t0">2.500 ns</span>
+          </div>
+          <input id="ctrl-t0" type="range" min="0.005" max="5.000" step="0.001" value="2.500" />
+          <div class="range-bounds"><span>0.005 ns</span><span>5.000 ns</span></div>
+        </div>
+      </section>
+
+      <!-- Stabilization & Coupling -->
+      <section class="control-section">
+        <div class="section-title" data-i18n="secStabilization">2. Параметры гипотезы стабилизации</div>
+
+        <div class="field">
+          <div class="field-header">
+            <label class="field-label" for="ctrl-tau" data-i18n="lblTau">Время стабилизации τ_stab (лог.)</label>
+            <span class="field-value" id="val-tau">3.000 ns</span>
+          </div>
+          <input id="ctrl-tau" type="range" min="0" max="1000" step="1" value="869" />
+          <div class="range-bounds"><span>0.001 ns</span><span>0.10 ns</span><span>10.0 ns</span></div>
+        </div>
+
+        <div class="field">
+          <div class="field-header">
+            <label class="field-label" for="ctrl-eps" data-i18n="lblEps">Параметр связи ε · q̄</label>
+            <span class="field-value" id="val-eps">0.0030</span>
+          </div>
+          <input id="ctrl-eps" type="range" min="0.000" max="0.020" step="0.0005" value="0.003" />
+          <div class="range-bounds"><span>0.000</span><span>0.020</span></div>
+        </div>
+      </section>
+
+      <!-- Interferometer & Pointers -->
+      <section class="control-section">
+        <div class="section-title" data-i18n="secInterferometer">3. Параметры интерферометра и указателей</div>
+
+        <div class="field">
+          <div class="field-header">
+            <label class="field-label" for="ctrl-phi" data-i18n="lblPhi">Относительная фаза φ</label>
+            <div class="field-value-wrap">
+              <span class="field-value" id="val-phi">1.571 rad (90.0°)</span>
+              <button type="button" id="btn-reset-phi" class="btn btn-mini" title="Reset to quadrature π/2">π/2</button>
+            </div>
+          </div>
+          <input id="ctrl-phi" type="range" min="0" max="6.2831853" step="0.001" value="1.5707963" />
+          <div class="range-bounds"><span>0</span><span>π/2</span><span>π</span><span>2π</span></div>
+        </div>
+
+        <div class="field">
+          <div class="field-header">
+            <label class="field-label" for="ctrl-vis" data-i18n="lblVis">Видность интерференции V</label>
+            <span class="field-value" id="val-vis">0.980</span>
+          </div>
+          <input id="ctrl-vis" type="range" min="0.50" max="1.00" step="0.005" value="0.98" />
+          <div class="range-bounds"><span>0.50</span><span>1.00</span></div>
+        </div>
+
+        <div class="field">
+          <div class="field-header">
+            <label class="field-label" for="ctrl-shift" data-i18n="lblShift">Слабый сдвиг δx/σ = δy/σ</label>
+            <span class="field-value" id="val-shift">0.200</span>
+          </div>
+          <input id="ctrl-shift" type="range" min="0.05" max="0.35" step="0.005" value="0.20" />
+          <div class="range-bounds"><span>0.05</span><span>0.35</span></div>
+        </div>
+
+        <div class="field">
+          <div class="field-header">
+            <span class="field-label" data-i18n="lblInversion">Одноосевая инверсия знака сдвига</span>
+          </div>
+          <div class="toggle-group">
+            <button type="button" id="inv-normal" class="toggle-btn active-cyan">Normal (+δx, +δy)</button>
+            <button type="button" id="inv-flipped" class="toggle-btn">Inverted (−δx, +δy)</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Operating Mode & Shot Noise -->
+      <section class="control-section">
+        <div class="section-title" data-i18n="secMode">4. Режим задержки и дробовой шум</div>
+
+        <div class="field">
+          <div class="field-header">
+            <span class="field-label" data-i18n="lblMode">Конфигурация оптической задержки Δt</span>
+          </div>
+          <div class="toggle-group three">
+            <button type="button" id="mode-1" class="toggle-btn" data-i18n="btnMode1">Mode I</button>
+            <button type="button" id="mode-2" class="toggle-btn" data-i18n="btnMode2">Mode II</button>
+            <button type="button" id="mode-both" class="toggle-btn active-emerald" data-i18n="btnModeBoth">Сравнение</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-header">
+            <span class="field-label" data-i18n="lblSweep">Окно сканирования Δt_max</span>
+            <span class="field-value" id="val-dtmax">15.00 ns</span>
+          </div>
+          <div class="toggle-group three">
+            <button type="button" class="toggle-btn active-cyan sweep-btn" data-span="auto" data-i18n="spanAuto">Авто (5τ)</button>
+            <button type="button" class="toggle-btn sweep-btn" data-span="0.5">0.5 ns</button>
+            <button type="button" class="toggle-btn sweep-btn" data-span="15">15 ns</button>
+          </div>
+        </div>
+
+        <div class="checkbox-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="ctrl-noise" checked />
+            <span data-i18n="lblNoise">Симулировать дробовой шум</span>
+          </label>
+          <button type="button" id="btn-resample" class="btn btn-mini" data-i18n="btnResample">Переснять</button>
+        </div>
+
+        <div class="field">
+          <div class="field-header">
+            <label class="field-label" for="ctrl-n" data-i18n="lblPhotons">Фотонов на точку задержки N</label>
+            <span class="field-value" id="val-n">1.60 × 10⁸</span>
+          </div>
+          <input id="ctrl-n" type="range" min="600" max="1000" step="1" value="820" />
+          <div class="range-bounds"><span>10⁶</span><span>10⁸</span><span>10¹⁰</span></div>
+        </div>
+      </section>
+    </aside>
+
+    <!-- Right Stage -->
+    <div class="stage-column">
+      <!-- Live Telemetry Cards -->
+      <section class="telemetry-grid" aria-label="Telemetry metrics">
+        <div class="metric-card">
+          <div class="metric-label" data-i18n="mOverlap">Перекрытие мод η</div>
+          <div class="metric-val" id="met-eta">0.9900</div>
+          <div class="metric-sub" id="met-eta-sub">δx/σ = δy/σ = 0.200</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-label" data-i18n="mCqm">Базовая линия C_QM</div>
+          <div class="metric-val" id="met-cqm">-0.2500</div>
+          <div class="metric-sub" data-i18n="mCqmSub">Стандартная КМ (инвар.)</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-label" data-i18n="mDc0">Плато ΔC_I(0) при T₀</div>
+          <div class="metric-val" id="met-dc0">-0.0630</div>
+          <div class="metric-sub" id="met-dc0-sub">ΔC₀ = -0.1450</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-label" data-i18n="mSigma">Погрешность 1σ (δC)</div>
+          <div class="metric-val" id="met-sigma">0.0020</div>
+          <div class="metric-sub" id="met-sigma-sub">N = 1.60 × 10⁸</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-label" data-i18n="mSnr">Отношение SNR</div>
+          <div class="metric-val" id="met-snr">31.8 σ</div>
+          <div class="metric-sub">|ΔC_I(0)| / δC</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-label" data-i18n="mN5">Бюджет фотонов N₅σ</div>
+          <div class="metric-val" id="met-n5">3.94 × 10⁶</div>
+          <div class="metric-sub" data-i18n="mN5Sub">Порог 5σ достоверности</div>
+        </div>
+
+        <div class="metric-card status-card detectable" id="status-card">
+          <div class="metric-label" data-i18n="mStatus">Статус обнаружимости</div>
+          <div class="metric-val" id="met-status">● DETECTABLE (&gt; 5σ)</div>
+          <div class="metric-sub" id="met-status-sub">T₀ / τ_stab = 0.83</div>
+        </div>
+      </section>
+
+      <!-- Top Canvas: Interactive Optical Schematic -->
+      <section class="canvas-card">
+        <div class="canvas-header">
+          <div class="canvas-title" data-i18n="schematicTitle">Оптическая схема интерферометра Маха–Цендера (динамическая)</div>
+          <div class="canvas-subtitle" id="schematic-subtitle">Mode I + Mode II Comparison · 4f Free-Space Relay</div>
+        </div>
+        <div class="canvas-wrap schematic-wrap">
+          <canvas id="canvas-schematic"></canvas>
+        </div>
+      </section>
+
+      <!-- Bottom Canvas: Main Covariance Plot -->
+      <section class="canvas-card">
+        <div class="canvas-header">
+          <div>
+            <div class="canvas-title" data-i18n="plotTitle">Зависимость ковариации от управляемой задержки Δt</div>
+            <div class="canvas-subtitle" id="plot-subtitle">C(Δt) = C_QM + ΔC(Δt)</div>
+          </div>
+          <div class="segmented" role="group" aria-label="Plot view selector">
+            <button type="button" id="view-total" class="active" data-i18n="viewTotal">Полная C(Δt)</button>
+            <button type="button" id="view-excess" data-i18n="viewExcess">Избыток ΔC(Δt)</button>
+          </div>
+        </div>
+
+        <div class="canvas-wrap plot-wrap" id="plot-container">
+          <canvas id="canvas-plot"></canvas>
+          <div class="crosshair-hud" id="crosshair-hud"></div>
+        </div>
+
+        <div class="legend-bar">
+          <span class="legend-item"><span class="swatch swatch-dashed"></span><span data-i18n="legQm">Стандартная КМ C_QM</span></span>
+          <span class="legend-item"><span class="swatch swatch-cyan"></span><span data-i18n="legMode1">Mode I: Pre-BS2 C_I(Δt)</span></span>
+          <span class="legend-item"><span class="swatch swatch-amber"></span><span data-i18n="legMode2">Mode II: Null Control C_II(Δt)</span></span>
+          <span class="legend-item"><span class="swatch-band"></span><span data-i18n="legBand">Коридор ±1σ / симуляция</span></span>
+        </div>
+      </section>
+
+      <footer class="footer-note">
+        <span data-i18n="footerLeft">Автономный расчёт in-browser · Постселекция выходного порта D₊(φ) · Точное гауссово перекрытие мод</span>
+        <span data-i18n="footerRight">Single-file HTML5 Canvas · Готово для публикации на GitHub Pages</span>
+      </footer>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // =========================================================
+      // 1. State & Bilingual Dictionary
+      // =========================================================
+      const I18N = {
+        ru: {
+          appTitle: 'Испытательный стенд МЦИ со слабыми измерениями',
+          appSubtitle: 'Феноменологический симулятор: Delayed Stabilization in Quantum Measurement',
+          pngDark: 'PNG: Тёмный',
+          pngLight: 'PNG: Белый',
+          exportPng: 'Export PNG',
+          exportCsv: 'Export CSV',
+          secPlatform: '1. Оптическая платформа и базовое время T₀',
+          lblT0: 'Базовое время контура T₀',
+          secStabilization: '2. Параметры гипотезы стабилизации',
+          lblTau: 'Время стабилизации τ_stab (лог.)',
+          lblEps: 'Параметр связи ε · q̄',
+          secInterferometer: '3. Параметры интерферометра и указателей',
+          lblPhi: 'Относительная фаза φ',
+          lblVis: 'Видность интерференции V',
+          lblShift: 'Слабый сдвиг δx/σ = δy/σ',
+          lblInversion: 'Одноосевая инверсия знака сдвига',
+          secMode: '4. Режим задержки и дробовой шум',
+          lblMode: 'Конфигурация оптической задержки Δt',
+          btnMode1: 'Mode I',
+          btnMode2: 'Mode II',
+          btnModeBoth: 'Сравнение',
+          lblSweep: 'Окно сканирования Δt_max',
+          spanAuto: 'Авто (5τ)',
+          lblNoise: 'Симулировать дробовой шум',
+          btnResample: 'Переснять',
+          lblPhotons: 'Фотонов на точку задержки N',
+          mOverlap: 'Перекрытие мод η',
+          mCqm: 'Базовая линия C_QM',
+          mCqmSub: 'Стандартная КМ (инвар.)',
+          mDc0: 'Плато ΔC_I(0) при T₀',
+          mSigma: 'Погрешность 1σ (δC)',
+          mSnr: 'Отношение SNR',
+          mN5: 'Бюджет фотонов N₅σ',
+          mN5Sub: 'Порог 5σ достоверности',
+          mStatus: 'Статус обнаружимости',
+          schematicTitle: 'Оптическая схема интерферометра Маха–Цендера (динамическая)',
+          plotTitle: 'Зависимость ковариации от управляемой задержки Δt',
+          viewTotal: 'Полная C(Δt)',
+          viewExcess: 'Избыток ΔC(Δt)',
+          legQm: 'Стандартная КМ C_QM',
+          legMode1: 'Mode I: Pre-BS2 C_I(Δt)',
+          legMode2: 'Mode II: Null Control C_II(Δt)',
+          legBand: 'Коридор ±1σ / точки с error bars',
+          footerLeft: 'Автономный расчёт в браузере · Постселекция выходного порта D₊(φ) · Точное гауссово перекрытие мод',
+          footerRight: 'Единый файл HTML5 Canvas · Готово к публикации на GitHub Pages',
+          statusDetectable: '● DETECTABLE (> 5σ)',
+          statusMarginal: '▲ MARGINAL (1σ–5σ)',
+          statusSuppressed: '✖ SUPPRESSED (T₀ ≫ τ_stab)',
+          statusBelow: '✖ BELOW NOISE (< 1σ)',
+          statusZero: '— НУЛЕВОЙ СИГНАЛ',
+          axisDelay: 'Управляемая задержка Δt (нс)',
+          axisCovTotal: 'Ковариация второго порядка C(Δt)',
+          axisCovExcess: 'Избыточная корреляция ΔC(Δt)',
+          schSource: 'Одиночные\nфотоны',
+          schArmA: 'Плечо A',
+          schArmB: 'Плечо B',
+          schDelayPreActive: 'Балансная Δt\n(Mode I активна)',
+          schDelayPreBase: 'Базовый T₀\n(Δt = 0 перед BS2)',
+          schDelayPostActive: 'Задержка Δt\n(Mode II Null Control)',
+          schDelayPostBypass: 'Выход на\nдетектор',
+          schDetectorFree: '2D SPAD\nматрица',
+          schDetectorChip: '4-квадр. +\n2D SPAD',
+          schInsetTitle: 'Поперечный профиль указателя',
+        },
+        en: {
+          appTitle: 'MZI Weak-Measurement Testbed',
+          appSubtitle: 'Phenomenological Simulator: Delayed Stabilization in Quantum Measurement',
+          pngDark: 'PNG: Dark',
+          pngLight: 'PNG: White',
+          exportPng: 'Export PNG',
+          exportCsv: 'Export CSV',
+          secPlatform: '1. Optical Platform & Baseline Transit T₀',
+          lblT0: 'Baseline Loop Time T₀',
+          secStabilization: '2. Stabilization Hypothesis Parameters',
+          lblTau: 'Stabilization Time τ_stab (log)',
+          lblEps: 'Coupling Amplitude ε · q̄',
+          secInterferometer: '3. Interferometer & Pointer Geometry',
+          lblPhi: 'Relative Phase φ',
+          lblVis: 'Interference Visibility V',
+          lblShift: 'Weak Shift δx/σ = δy/σ',
+          lblInversion: 'Single-Axis Sign Inversion',
+          secMode: '4. Delay Mode & Shot Noise',
+          lblMode: 'Optical Delay Δt Architecture',
+          btnMode1: 'Mode I',
+          btnMode2: 'Mode II',
+          btnModeBoth: 'Compare',
+          lblSweep: 'Delay Sweep Span Δt_max',
+          spanAuto: 'Auto (5τ)',
+          lblNoise: 'Simulate Shot Noise',
+          btnResample: 'Resample',
+          lblPhotons: 'Photons per Delay Point N',
+          mOverlap: 'Mode Overlap η',
+          mCqm: 'Baseline C_QM',
+          mCqmSub: 'Standard QM (invariant)',
+          mDc0: 'Plateau ΔC_I(0) at T₀',
+          mSigma: '1σ Statistical Error (δC)',
+          mSnr: 'Signal-to-Noise (SNR)',
+          mN5: 'Photon Budget N₅σ',
+          mN5Sub: '5σ Discovery Threshold',
+          mStatus: 'Detectability Status',
+          schematicTitle: 'Mach–Zehnder Interferometer Optical Bench (Dynamic Schematic)',
+          plotTitle: 'Second-Order Covariance vs. Controllable Delay Δt',
+          viewTotal: 'Total C(Δt)',
+          viewExcess: 'Excess ΔC(Δt)',
+          legQm: 'Standard QM C_QM',
+          legMode1: 'Mode I: Pre-BS2 C_I(Δt)',
+          legMode2: 'Mode II: Null Control C_II(Δt)',
+          legBand: '±1σ Confidence Band / Simulated Data',
+          footerLeft: 'Client-side exact solver · Postselected output port D₊(φ) · Exact Gaussian overlap',
+          footerRight: 'Zero-dependency HTML5 Canvas · Ready for GitHub Pages',
+          statusDetectable: '● DETECTABLE (> 5σ)',
+          statusMarginal: '▲ MARGINAL (1σ–5σ)',
+          statusSuppressed: '✖ SUPPRESSED (T₀ ≫ τ_stab)',
+          statusBelow: '✖ BELOW NOISE (< 1σ)',
+          statusZero: '— ZERO SIGNAL',
+          axisDelay: 'Controllable Delay Δt (ns)',
+          axisCovTotal: 'Second-Order Covariance C(Δt)',
+          axisCovExcess: 'Excess Correlation ΔC(Δt)',
+          schSource: 'Single-Photon\nSource',
+          schArmA: 'Arm A',
+          schArmB: 'Arm B',
+          schDelayPreActive: 'Balanced Δt\n(Mode I Active)',
+          schDelayPreBase: 'Baseline T₀\n(Δt = 0 pre-BS2)',
+          schDelayPostActive: 'Post-BS2 Δt\n(Mode II Null Ctrl)',
+          schDelayPostBypass: 'Direct to\nDetector',
+          schDetectorFree: '2D SPAD\nArray',
+          schDetectorChip: '4-Quad +\n2D SPAD',
+          schInsetTitle: 'Transverse Pointer Profile',
+        }
+      };
+
+      const state = {
+        lang: 'ru',
+        pngTheme: 'dark',
+        platform: '4f',
+        T0: 2.500,
+        tauStab: 3.000,
+        epsQ: 0.003,
+        phi: Math.PI / 2,
+        V: 0.98,
+        shift: 0.20,
+        inverted: false,
+        mode: 'both', // 'mode1' | 'mode2' | 'both'
+        sweepSpan: 'auto', // 'auto' | '0.5' | '15'
+        noiseEnabled: true,
+        photons: 1.6e8,
+        plotView: 'total', // 'total' | 'excess'
+        hoverX: null,
+        hoverY: null,
+        pulsePhase: 0,
+        noiseSamplesM1: [],
+        noiseSamplesM2: [],
+      };
+
+      const NUM_SIM_POINTS = 21;
+      const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // =========================================================
+      // 2. Exact Physics Engine
+      // =========================================================
+      function gaussianNoise() {
+        let u = 0, v = 0;
+        while (u === 0) u = Math.random();
+        while (v === 0) v = Math.random();
+        return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+      }
+
+      function regenerateNoise() {
+        state.noiseSamplesM1 = [];
+        state.noiseSamplesM2 = [];
+        for (let i = 0; i < NUM_SIM_POINTS; i++) {
+          state.noiseSamplesM1.push(gaussianNoise());
+          state.noiseSamplesM2.push(gaussianNoise());
+        }
+      }
+      regenerateNoise();
+
+      function getDtMax() {
+        if (state.sweepSpan === 'auto') {
+          return Math.max(0.05, 5 * state.tauStab);
+        }
+        return parseFloat(state.sweepSpan);
+      }
+
+      function computePhysics() {
+        const rx = state.shift;
+        const ry = state.shift;
+        const eta = Math.exp(-(rx * rx + ry * ry) / 8);
+        const denom = 1 + state.V * eta * Math.cos(state.phi);
+        const C_QM = -1 / (4 * denom);
+
+        const sInv = state.inverted ? 1 : -1;
+        const deltaC0 =
+          sInv *
+          ((2 * state.V * eta * state.epsQ) / (rx * ry)) *
+          (Math.sin(state.phi) / denom);
+
+        const attenuation = Math.exp(-state.T0 / state.tauStab);
+        const deltaCI0 = deltaC0 * attenuation;
+        const sigmaC = 1 / (rx * ry * Math.sqrt(state.photons));
+
+        const absDc0 = Math.abs(deltaCI0);
+        const snr = sigmaC > 0 ? absDc0 / sigmaC : 0;
+        const N5sigma =
+          absDc0 > 1e-12 ? Math.pow(5 / (absDc0 * rx * ry), 2) : Infinity;
+
+        const ratioT0 = state.T0 / state.tauStab;
+        let statusKey = 'statusDetectable';
+        let statusClass = 'detectable';
+
+        if (absDc0 < 1e-9) {
+          statusKey = 'statusZero';
+          statusClass = 'suppressed';
+        } else if (snr >= 5) {
+          statusKey = 'statusDetectable';
+          statusClass = 'detectable';
+        } else if (ratioT0 > 3 && Math.abs(deltaC0) > 1e-9) {
+          statusKey = 'statusSuppressed';
+          statusClass = 'suppressed';
+        } else if (snr >= 1) {
+          statusKey = 'statusMarginal';
+          statusClass = 'marginal';
+        } else {
+          statusKey = 'statusBelow';
+          statusClass = 'suppressed';
+        }
+
+        const dtMax = getDtMax();
+        return {
+          eta,
+          C_QM,
+          deltaC0,
+          deltaCI0,
+          sigmaC,
+          snr,
+          N5sigma,
+          ratioT0,
+          statusKey,
+          statusClass,
+          dtMax,
+        };
+      }
+
+      function evalCurves(phys, dt) {
+        const dC1 = phys.deltaCI0 * Math.exp(-dt / state.tauStab);
+        const dC2 = phys.deltaCI0;
+        return {
+          dC1,
+          dC2,
+          C1: phys.C_QM + dC1,
+          C2: phys.C_QM + dC2,
+        };
+      }
+
+      // =========================================================
+      // 3. Formatting Helpers
+      // =========================================================
+      function fmtSci(val) {
+        if (!isFinite(val)) return '∞';
+        if (val === 0) return '0';
+        const exp = Math.floor(Math.log10(Math.abs(val)));
+        const mant = val / Math.pow(10, exp);
+        const supMap = { '-': '⁻', '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹' };
+        const expStr = String(exp).split('').map(c => supMap[c] || c).join('');
+        return `${mant.toFixed(2)} × 10${expStr}`;
+      }
+
+      function fmtFixed(val, digits) {
+        const s = val.toFixed(digits);
+        return s === '-0.0000' || s === '-0.000' || s === '-0.00' ? s.slice(1) : s;
+      }
+
+      function fmtTime(ns) {
+        if (ns < 0.1) return `${ns.toFixed(3)} ns`;
+        if (ns < 10) return `${ns.toFixed(2)} ns`;
+        return `${ns.toFixed(1)} ns`;
+      }
+
+      // Slider log mapping helpers
+      function sliderToTau(pos) {
+        // 0..1000 -> 0.001..10.0 ns
+        return 0.001 * Math.pow(10, (4 * pos) / 1000);
+      }
+
+      function tauToSlider(tau) {
+        return Math.round((Math.log10(tau / 0.001) / 4) * 1000);
+      }
+
+      function sliderToPhotons(pos) {
+        // 600..1000 -> 1e6..1e10
+        return Math.pow(10, pos / 100);
+      }
+
+      // =========================================================
+      // 4. DOM Bindings & UI Update
+      // =========================================================
+      const els = {
+        ctrlT0: document.getElementById('ctrl-t0'),
+        ctrlTau: document.getElementById('ctrl-tau'),
+        ctrlEps: document.getElementById('ctrl-eps'),
+        ctrlPhi: document.getElementById('ctrl-phi'),
+        ctrlVis: document.getElementById('ctrl-vis'),
+        ctrlShift: document.getElementById('ctrl-shift'),
+        ctrlNoise: document.getElementById('ctrl-noise'),
+        ctrlN: document.getElementById('ctrl-n'),
+        valT0: document.getElementById('val-t0'),
+        valTau: document.getElementById('val-tau'),
+        valEps: document.getElementById('val-eps'),
+        valPhi: document.getElementById('val-phi'),
+        valVis: document.getElementById('val-vis'),
+        valShift: document.getElementById('val-shift'),
+        valDtMax: document.getElementById('val-dtmax'),
+        valN: document.getElementById('val-n'),
+        metEta: document.getElementById('met-eta'),
+        metEtaSub: document.getElementById('met-eta-sub'),
+        metCqm: document.getElementById('met-cqm'),
+        metDc0: document.getElementById('met-dc0'),
+        metDc0Sub: document.getElementById('met-dc0-sub'),
+        metSigma: document.getElementById('met-sigma'),
+        metSigmaSub: document.getElementById('met-sigma-sub'),
+        metSnr: document.getElementById('met-snr'),
+        metN5: document.getElementById('met-n5'),
+        metStatus: document.getElementById('met-status'),
+        metStatusSub: document.getElementById('met-status-sub'),
+        statusCard: document.getElementById('status-card'),
+        schSubtitle: document.getElementById('schematic-subtitle'),
+        plotSubtitle: document.getElementById('plot-subtitle'),
+        canvasSchematic: document.getElementById('canvas-schematic'),
+        canvasPlot: document.getElementById('canvas-plot'),
+        plotContainer: document.getElementById('plot-container'),
+        hud: document.getElementById('crosshair-hud'),
+      };
+
+      function applyLanguage() {
+        const dict = I18N[state.lang];
+        document.documentElement.lang = state.lang;
+        document.querySelectorAll('[data-i18n]').forEach((node) => {
+          const key = node.getAttribute('data-i18n');
+          if (dict[key]) {
+            node.textContent = dict[key];
+          }
+        });
+        updateUI();
+      }
+
+      function updateUI() {
+        const phys = computePhysics();
+        const dict = I18N[state.lang];
+
+        els.valT0.textContent = `${state.T0.toFixed(3)} ns`;
+        els.valTau.textContent = state.tauStab < 0.1 ? `${state.tauStab.toFixed(4)} ns` : `${state.tauStab.toFixed(3)} ns`;
+        els.valEps.textContent = state.epsQ.toFixed(4);
+        const deg = ((state.phi * 180) / Math.PI).toFixed(1);
+        els.valPhi.textContent = `${state.phi.toFixed(3)} rad (${deg}°)`;
+        els.valVis.textContent = state.V.toFixed(3);
+        els.valShift.textContent = state.shift.toFixed(3);
+        els.valDtMax.textContent = fmtTime(phys.dtMax);
+        els.valN.textContent = fmtSci(state.photons);
+
+        els.metEta.textContent = phys.eta.toFixed(4);
+        els.metEtaSub.textContent = `δx/σ = ${state.inverted ? '−' : '+'}${state.shift.toFixed(2)}, δy/σ = +${state.shift.toFixed(2)}`;
+        els.metCqm.textContent = fmtFixed(phys.C_QM, 4);
+        els.metDc0.textContent = fmtFixed(phys.deltaCI0, 4);
+        els.metDc0Sub.textContent = `ΔC₀ = ${fmtFixed(phys.deltaC0, 4)}`;
+        els.metSigma.textContent = phys.sigmaC.toFixed(4);
+        els.metSigmaSub.textContent = `N = ${fmtSci(state.photons)}`;
+        els.metSnr.textContent = `${phys.snr.toFixed(1)} σ`;
+        els.metN5.textContent = fmtSci(phys.N5sigma);
+
+        els.metStatus.textContent = dict[phys.statusKey];
+        els.metStatusSub.textContent = `T₀ / τ_stab = ${phys.ratioT0.toFixed(2)}`;
+        els.statusCard.className = `metric-card status-card ${phys.statusClass}`;
+
+        const platNames = {
+          si3n4: 'Si₃N₄ Integrated Chip',
+          soi: 'SOI Integrated Chip',
+          '4f': '4f Free-Space Relay Bench',
+          custom: `Custom Loop (T₀ = ${state.T0.toFixed(3)} ns)`
+        };
+        const modeNames = {
+          mode1: 'Mode I (Pre-BS2)',
+          mode2: 'Mode II (Post-BS2 Null Control)',
+          both: 'Mode I + Mode II Comparison'
+        };
+        els.schSubtitle.textContent = `${modeNames[state.mode]} · ${platNames[state.platform]}`;
+        els.plotSubtitle.textContent =
+          state.plotView === 'total'
+            ? `C(Δt) = C_QM + ΔC(Δt) · φ = ${state.phi.toFixed(3)} rad · ${state.inverted ? 'Inverted (−δx, +δy)' : 'Normal (+δx, +δy)'}`
+            : `ΔC(Δt) = C(Δt) − C_QM · ΔC_I(0) = ${fmtFixed(phys.deltaCI0, 4)} · τ_stab = ${fmtTime(state.tauStab)}`;
+
+        drawSchematic(phys);
+        drawPlot(els.canvasPlot, phys, 'dark', false);
+      }
+
+      // =========================================================
+      // 5. Canvas HiDPI Helper
+      // =========================================================
+      function syncCanvasSize(canvas) {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+        const w = Math.max(300, Math.round(rect.width));
+        const h = Math.max(180, Math.round(rect.height));
+        if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) {
+          canvas.width = Math.round(w * dpr);
+          canvas.height = Math.round(h * dpr);
+        }
+        const ctx = canvas.getContext('2d');
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        return { ctx, w, h };
+      }
+
+      function drawRoundedRect(ctx, x, y, w, h, r) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.lineTo(x + w - r, y);
+        ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+        ctx.lineTo(x + w, y + h - r);
+        ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+        ctx.lineTo(x + r, y + h);
+        ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+        ctx.lineTo(x, y + r);
+        ctx.quadraticCurveTo(x, y, x + r, y);
+        ctx.closePath();
+      }
+
+      function drawMultiline(ctx, text, x, y, lineHeight) {
+        const lines = text.split('\n');
+        const startY = y - ((lines.length - 1) * lineHeight) / 2;
+        lines.forEach((line, idx) => {
+          ctx.fillText(line, x, startY + idx * lineHeight);
+        });
+      }
+
+      // =========================================================
+      // 6. Optical Bench Schematic Renderer (Canvas 1)
+      // =========================================================
+      function drawSchematic(phys) {
+        const { ctx, w, h } = syncCanvasSize(els.canvasSchematic);
+        const dict = I18N[state.lang];
+
+        ctx.clearRect(0, 0, w, h);
+        ctx.fillStyle = '#090d16';
+        ctx.fillRect(0, 0, w, h);
+
+        // Subtle optical table grid
+        ctx.strokeStyle = 'rgba(30, 41, 59, 0.45)';
+        ctx.lineWidth = 1;
+        for (let gx = 24; gx < w; gx += 32) {
+          ctx.beginPath();
+          ctx.moveTo(gx, 0);
+          ctx.lineTo(gx, h);
+          ctx.stroke();
+        }
+        for (let gy = 24; gy < h; gy += 32) {
+          ctx.beginPath();
+          ctx.moveTo(0, gy);
+          ctx.lineTo(w, gy);
+          ctx.stroke();
+        }
+
+        // Reserve right inset for 2D pointer cross-section if wide enough
+        const hasInset = w >= 720;
+        const benchW = hasInset ? w - 195 : w;
+        const insetX = benchW + 10;
+
+        // Coordinates along bench
+        const midY = h * 0.5;
+        const armAY = h * 0.27;
+        const armBY = h * 0.73;
+
+        const xSrc = benchW * 0.08;
+        const xBS1 = benchW * 0.21;
+        const xShift = benchW * 0.36;
+        const xPreDelay = benchW * 0.54;
+        const xBS2 = benchW * 0.70;
+        const xPostDelay = benchW * 0.83;
+        const xDet = benchW * 0.94;
+
+        const isM1Active = state.mode === 'mode1' || state.mode === 'both';
+        const isM2Active = state.mode === 'mode2' || state.mode === 'both';
+
+        // Beam path lines
+        ctx.lineWidth = 2.2;
+        ctx.strokeStyle = '#06b6d4';
+        // Source -> BS1
+        ctx.beginPath();
+        ctx.moveTo(xSrc + 28, midY);
+        ctx.lineTo(xBS1, midY);
+        ctx.stroke();
+
+        // Arm A path
+        ctx.strokeStyle = isM1Active ? '#06b6d4' : '#38bdf8';
+        ctx.beginPath();
+        ctx.moveTo(xBS1, midY);
+        ctx.lineTo(xBS1 + 26, armAY);
+        ctx.lineTo(xBS2 - 26, armAY);
+        ctx.lineTo(xBS2, midY);
+        ctx.stroke();
+
+        // Arm B path
+        ctx.beginPath();
+        ctx.moveTo(xBS1, midY);
+        ctx.lineTo(xBS1 + 26, armBY);
+        ctx.lineTo(xBS2 - 26, armBY);
+        ctx.lineTo(xBS2, midY);
+        ctx.stroke();
+
+        // BS2 -> Post Delay -> Detector (Port D+)
+        ctx.strokeStyle = state.mode === 'mode2' ? '#f59e0b' : '#06b6d4';
+        ctx.beginPath();
+        ctx.moveTo(xBS2, midY);
+        ctx.lineTo(xDet - 22, midY);
+        ctx.stroke();
+
+        // Unused dark port D- stub
+        ctx.strokeStyle = 'rgba(148, 163, 184, 0.3)';
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(xBS2, midY);
+        ctx.lineTo(xBS2 + 18, midY + 42);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#64748b';
+        ctx.font = '10px ' + getComputedStyle(document.body).getPropertyValue('--font-mono');
+        ctx.textAlign = 'left';
+        ctx.fillText('D₋', xBS2 + 21, midY + 45);
+        ctx.fillText('D₊(φ)', xBS2 + 12, midY - 11);
+
+        // Helper for optical blocks
+        function drawBlock(x, y, bw, bh, fill, stroke, text, textColor, fontSize = 10.5) {
+          drawRoundedRect(ctx, x - bw / 2, y - bh / 2, bw, bh, 5);
+          ctx.fillStyle = fill;
+          ctx.fill();
+          ctx.lineWidth = 1.25;
+          ctx.strokeStyle = stroke;
+          ctx.stroke();
+          ctx.fillStyle = textColor;
+          ctx.font = `500 ${fontSize}px ` + getComputedStyle(document.body).getPropertyValue('--font-sans');
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          drawMultiline(ctx, text, x, y, fontSize + 3);
+        }
+
+        // Source block
+        drawBlock(xSrc, midY, 72, 42, '#131a28', '#334155', dict.schSource, '#e2e8f0', 10);
+
+        // BS1 & BS2 (45 deg tilted plates)
+        [xBS1, xBS2].forEach((bx, idx) => {
+          ctx.save();
+          ctx.translate(bx, midY);
+          ctx.rotate(-Math.PI / 4);
+          ctx.fillStyle = 'rgba(103, 232, 249, 0.16)';
+          ctx.strokeStyle = '#67e8f9';
+          ctx.lineWidth = 1.6;
+          ctx.fillRect(-14, -4, 28, 8);
+          ctx.strokeRect(-14, -4, 28, 8);
+          ctx.restore();
+          ctx.fillStyle = '#94a3b8';
+          ctx.font = '600 10.5px ' + getComputedStyle(document.body).getPropertyValue('--font-mono');
+          ctx.textAlign = 'center';
+          ctx.fillText(idx === 0 ? 'BS₁' : 'BS₂', bx, midY + 26);
+        });
+
+        // Weak-shift plates + Phase modulator
+        const shiftAText = state.inverted ? '−δx\n(Inverted)' : '+δx\n(Plate X)';
+        drawBlock(
+          xShift,
+          armAY,
+          68,
+          36,
+          state.inverted ? 'rgba(244, 63, 94, 0.15)' : '#131a28',
+          state.inverted ? '#f43f5e' : '#38bdf8',
+          shiftAText,
+          state.inverted ? '#fda4af' : '#e2e8f0',
+          10
+        );
+        drawBlock(xShift, armBY, 68, 36, '#131a28', '#38bdf8', '+δy\n(Plate Y)', '#e2e8f0', 10);
+
+        // Phase element φ on Arm A
+        const phiX = (xShift + xPreDelay) * 0.48;
+        drawBlock(phiX, armAY, 44, 26, '#131a28', '#475569', `φ`, '#fbbf24', 11);
+
+        // Pre-BS2 Delay Blocks (Arm A & Arm B)
+        const preFill = isM1Active ? 'rgba(6, 182, 212, 0.16)' : '#0f172a';
+        const preStroke = isM1Active ? '#06b6d4' : '#334155';
+        const preTxt = isM1Active ? dict.schDelayPreActive : dict.schDelayPreBase;
+        const preTxtCol = isM1Active ? '#67e8f9' : '#64748b';
+
+        drawBlock(xPreDelay, armAY, 102, 38, preFill, preStroke, preTxt, preTxtCol, 10);
+        drawBlock(xPreDelay, armBY, 102, 38, preFill, preStroke, preTxt, preTxtCol, 10);
+
+        // Post-BS2 Delay Block
+        const postFill = isM2Active ? 'rgba(245, 158, 11, 0.16)' : '#0f172a';
+        const postStroke = isM2Active ? '#f59e0b' : '#334155';
+        const postTxt = isM2Active ? dict.schDelayPostActive : dict.schDelayPostBypass;
+        const postTxtCol = isM2Active ? '#fcd34d' : '#64748b';
+
+        drawBlock(xPostDelay, midY, 102, 42, postFill, postStroke, postTxt, postTxtCol, 9.8);
+
+        // Detector Block
+        const isChip = state.platform === 'si3n4' || state.platform === 'soi';
+        drawBlock(
+          xDet,
+          midY,
+          74,
+          46,
+          '#131a28',
+          '#10b981',
+          isChip ? dict.schDetectorChip : dict.schDetectorFree,
+          '#6ee7b7',
+          10
+        );
+
+        // Arm labels
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '10.5px ' + getComputedStyle(document.body).getPropertyValue('--font-sans');
+        ctx.textAlign = 'left';
+        ctx.fillText(dict.schArmA, xBS1 + 26, armAY - 25);
+        ctx.fillText(dict.schArmB, xBS1 + 26, armBY + 28);
+
+        // Animated photon wavepacket pulse
+        if (!reducedMotion) {
+          const p = state.pulsePhase;
+          let pxA, pyA, pxB, pyB;
+          if (p < 0.18) {
+            const t = p / 0.18;
+            pxA = pxB = xSrc + 30 + t * (xBS1 - xSrc - 30);
+            pyA = pyB = midY;
+          } else if (p < 0.72) {
+            const t = (p - 0.18) / 0.54;
+            pxA = pxB = xBS1 + t * (xBS2 - xBS1);
+            if (t < 0.08) {
+              const s = t / 0.08;
+              pyA = midY + s * (armAY - midY);
+              pyB = midY + s * (armBY - midY);
+            } else if (t > 0.92) {
+              const s = (t - 0.92) / 0.08;
+              pyA = armAY + s * (midY - armAY);
+              pyB = armBY + s * (midY - armBY);
+            } else {
+              pyA = armAY;
+              pyB = armBY;
+            }
+          } else {
+            const t = (p - 0.72) / 0.28;
+            pxA = pxB = xBS2 + t * (xDet - 36 - xBS2);
+            pyA = pyB = midY;
+          }
+          [
+            [pxA, pyA],
+            [pxB, pyB],
+          ].forEach(([px, py]) => {
+            ctx.beginPath();
+            ctx.arc(px, py, 4.2, 0, Math.PI * 2);
+            ctx.fillStyle = state.mode === 'mode2' && p >= 0.72 ? '#fbbf24' : '#22d3ee';
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(px, py, 8.5, 0, Math.PI * 2);
+            ctx.fillStyle = state.mode === 'mode2' && p >= 0.72 ? 'rgba(251, 191, 36, 0.22)' : 'rgba(34, 211, 238, 0.22)';
+            ctx.fill();
+          });
+        }
+
+        // Right 2D Transverse Pointer Inset
+        if (hasInset) {
+          const boxW = w - insetX - 12;
+          const boxH = h - 24;
+          drawRoundedRect(ctx, insetX, 12, boxW, boxH, 6);
+          ctx.fillStyle = '#0d121c';
+          ctx.fill();
+          ctx.strokeStyle = '#1e293b';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+
+          const cx = insetX + boxW / 2;
+          const cy = 12 + boxH * 0.54;
+          const r = Math.min(boxW, boxH) * 0.31;
+
+          ctx.fillStyle = '#94a3b8';
+          ctx.font = '500 10.5px ' + getComputedStyle(document.body).getPropertyValue('--font-sans');
+          ctx.textAlign = 'center';
+          ctx.fillText(dict.schInsetTitle, cx, 26);
+
+          // Crosshair axes
+          ctx.strokeStyle = '#334155';
+          ctx.beginPath();
+          ctx.moveTo(cx - r * 1.25, cy);
+          ctx.lineTo(cx + r * 1.25, cy);
+          ctx.moveTo(cx, cy - r * 1.25);
+          ctx.lineTo(cx, cy + r * 1.25);
+          ctx.stroke();
+
+          // Gaussian mode circles for Arm A (shifted x) and Arm B (shifted y)
+          const pxOffset = (state.inverted ? -1 : 1) * state.shift * r * 1.65;
+          const pyOffset = -state.shift * r * 1.65; // +y upward in screen space
+
+          ctx.beginPath();
+          ctx.arc(cx + pxOffset, cy, r * 0.68, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(6, 182, 212, 0.16)';
+          ctx.fill();
+          ctx.strokeStyle = '#06b6d4';
+          ctx.lineWidth = 1.4;
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.arc(cx, cy + pyOffset, r * 0.68, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(245, 158, 11, 0.14)';
+          ctx.fill();
+          ctx.strokeStyle = '#f59e0b';
+          ctx.stroke();
+
+          ctx.fillStyle = '#cbd5e1';
+          ctx.font = '10px ' + getComputedStyle(document.body).getPropertyValue('--font-mono');
+          ctx.fillText(`η = ${phys.eta.toFixed(4)}`, cx, h - 22);
+        }
+      }
+
+      // =========================================================
+      // 7. Covariance Plot Renderer (Canvas 2 & PNG Export)
+      // =========================================================
+      function drawPlot(canvas, phys, theme, isExport) {
+        let ctx, w, h;
+        if (isExport) {
+          w = 1440;
+          h = 840;
+          canvas.width = w;
+          canvas.height = h;
+          ctx = canvas.getContext('2d');
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+        } else {
+          ({ ctx, w, h } = syncCanvasSize(canvas));
+        }
+
+        const isLight = theme === 'light';
+        const palette = isLight
+          ? {
+              bg: '#ffffff',
+              grid: '#e2e8f0',
+              axis: '#64748b',
+              text: '#0f172a',
+              muted: '#475569',
+              qm: '#475569',
+              m1: '#0284c7',
+              m1Band: 'rgba(2, 132, 199, 0.14)',
+              m2: '#d97706',
+              m2Band: 'rgba(217, 119, 6, 0.14)',
+              crosshair: 'rgba(15, 23, 42, 0.35)',
+            }
+          : {
+              bg: '#090d16',
+              grid: '#1e293b',
+              axis: '#475569',
+              text: '#e2e8f0',
+              muted: '#94a3b8',
+              qm: '#94a3b8',
+              m1: '#06b6d4',
+              m1Band: 'rgba(6, 182, 212, 0.16)',
+              m2: '#f59e0b',
+              m2Band: 'rgba(245, 158, 11, 0.14)',
+              crosshair: 'rgba(226, 232, 240, 0.35)',
+            };
+
+        ctx.clearRect(0, 0, w, h);
+        ctx.fillStyle = palette.bg;
+        ctx.fillRect(0, 0, w, h);
+
+        const dict = I18N[state.lang];
+        const pad = isExport
+          ? { top: 96, right: 48, bottom: 84, left: 96 }
+          : { top: 28, right: 28, bottom: 52, left: 76 };
+
+        const plotW = w - pad.left - pad.right;
+        const plotH = h - pad.top - pad.bottom;
+
+        // Export header
+        if (isExport) {
+          ctx.fillStyle = palette.text;
+          ctx.font = '600 22px ' + getComputedStyle(document.body).getPropertyValue('--font-sans');
+          ctx.textAlign = 'left';
+          ctx.fillText(dict.plotTitle, pad.left, 40);
+
+          ctx.fillStyle = palette.muted;
+          ctx.font = '14px ' + getComputedStyle(document.body).getPropertyValue('--font-mono');
+          ctx.fillText(
+            `T₀ = ${state.T0.toFixed(3)} ns | τ_stab = ${fmtTime(state.tauStab)} | φ = ${state.phi.toFixed(3)} rad | V = ${state.V.toFixed(2)} | δx/σ = ${state.inverted ? '−' : '+'}${state.shift.toFixed(2)} | εq̄ = ${state.epsQ.toFixed(4)} | N = ${fmtSci(state.photons)}`,
+            pad.left,
+            66
+          );
+        }
+
+        const isTotal = state.plotView === 'total';
+        const dtMax = phys.dtMax;
+
+        // Compute Y range dynamically across baseline, curves, and +-1 sigma envelope
+        const baseVal = isTotal ? phys.C_QM : 0;
+        const peakVal = baseVal + phys.deltaCI0;
+        const sigmaPad = state.noiseEnabled ? phys.sigmaC * 2.1 : phys.sigmaC * 0.5;
+        let yMin = Math.min(baseVal, peakVal) - sigmaPad;
+        let yMax = Math.max(baseVal, peakVal) + sigmaPad;
+        const spanY = yMax - yMin;
+        const minSpan = Math.max(0.012, phys.sigmaC * 5);
+        if (spanY < minSpan) {
+          const mid = (yMin + yMax) / 2;
+          yMin = mid - minSpan / 2;
+          yMax = mid + minSpan / 2;
+        } else {
+          yMin -= spanY * 0.14;
+          yMax += spanY * 0.14;
+        }
+
+        const toX = (dt) => pad.left + (dt / dtMax) * plotW;
+        const toY = (val) => pad.top + ((yMax - val) / (yMax - yMin)) * plotH;
+
+        // Gridlines & ticks
+        const xTicks = 5;
+        const yTicks = 6;
+        ctx.font = `${isExport ? 13 : 11}px ` + getComputedStyle(document.body).getPropertyValue('--font-mono');
+        ctx.lineWidth = 1;
+
+        for (let i = 0; i <= xTicks; i++) {
+          const dt = (dtMax * i) / xTicks;
+          const px = toX(dt);
+          ctx.strokeStyle = palette.grid;
+          ctx.beginPath();
+          ctx.moveTo(px, pad.top);
+          ctx.lineTo(px, pad.top + plotH);
+          ctx.stroke();
+
+          ctx.fillStyle = palette.muted;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'top';
+          ctx.fillText(dt < 0.1 && dt > 0 ? dt.toFixed(3) : dt.toFixed(2), px, pad.top + plotH + 8);
+        }
+
+        for (let j = 0; j <= yTicks; j++) {
+          const val = yMin + ((yMax - yMin) * j) / yTicks;
+          const py = toY(val);
+          ctx.strokeStyle = palette.grid;
+          ctx.beginPath();
+          ctx.moveTo(pad.left, py);
+          ctx.lineTo(pad.left + plotW, py);
+          ctx.stroke();
+
+          ctx.fillStyle = palette.muted;
+          ctx.textAlign = 'right';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(val.toFixed(4), pad.left - 8, py);
+        }
+
+        // Plot border
+        ctx.strokeStyle = palette.axis;
+        ctx.strokeRect(pad.left, pad.top, plotW, plotH);
+
+        // Axis labels
+        ctx.fillStyle = palette.text;
+        ctx.font = `500 ${isExport ? 15 : 12}px ` + getComputedStyle(document.body).getPropertyValue('--font-sans');
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        ctx.fillText(dict.axisDelay, pad.left + plotW / 2, h - (isExport ? 18 : 8));
+
+        ctx.save();
+        ctx.translate(isExport ? 24 : 18, pad.top + plotH / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillText(isTotal ? dict.axisCovTotal : dict.axisCovExcess, 0, 0);
+        ctx.restore();
+
+        // Clip curves inside plot box
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(pad.left, pad.top, plotW, plotH);
+        ctx.clip();
+
+        const showM1 = state.mode === 'mode1' || state.mode === 'both';
+        const showM2 = state.mode === 'mode2' || state.mode === 'both';
+
+        // +-1 sigma bands
+        const steps = 160;
+        if (state.noiseEnabled) {
+          if (showM2) {
+            const yTop = toY((isTotal ? phys.C_QM : 0) + phys.deltaCI0 + phys.sigmaC);
+            const yBot = toY((isTotal ? phys.C_QM : 0) + phys.deltaCI0 - phys.sigmaC);
+            ctx.fillStyle = palette.m2Band;
+            ctx.fillRect(pad.left, yTop, plotW, yBot - yTop);
+          }
+          if (showM1) {
+            ctx.fillStyle = palette.m1Band;
+            ctx.beginPath();
+            for (let s = 0; s <= steps; s++) {
+              const dt = (dtMax * s) / steps;
+              const v = (isTotal ? phys.C_QM : 0) + phys.deltaCI0 * Math.exp(-dt / state.tauStab) + phys.sigmaC;
+              if (s === 0) ctx.moveTo(toX(dt), toY(v));
+              else ctx.lineTo(toX(dt), toY(v));
+            }
+            for (let s = steps; s >= 0; s--) {
+              const dt = (dtMax * s) / steps;
+              const v = (isTotal ? phys.C_QM : 0) + phys.deltaCI0 * Math.exp(-dt / state.tauStab) - phys.sigmaC;
+              ctx.lineTo(toX(dt), toY(v));
+            }
+            ctx.closePath();
+            ctx.fill();
+          }
+        }
+
+        // Standard QM baseline (dashed)
+        ctx.strokeStyle = palette.qm;
+        ctx.lineWidth = isExport ? 2.2 : 1.75;
+        ctx.setLineDash([7, 6]);
+        ctx.beginPath();
+        ctx.moveTo(pad.left, toY(baseVal));
+        ctx.lineTo(pad.left + plotW, toY(baseVal));
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Mode II Null Control curve
+        if (showM2) {
+          const val2 = (isTotal ? phys.C_QM : 0) + phys.deltaCI0;
+          ctx.strokeStyle = palette.m2;
+          ctx.lineWidth = isExport ? 3 : 2.3;
+          ctx.beginPath();
+          ctx.moveTo(pad.left, toY(val2));
+          ctx.lineTo(pad.left + plotW, toY(val2));
+          ctx.stroke();
+        }
+
+        // Mode I exponential decay curve
+        if (showM1) {
+          ctx.strokeStyle = palette.m1;
+          ctx.lineWidth = isExport ? 3.2 : 2.5;
+          ctx.beginPath();
+          for (let s = 0; s <= steps; s++) {
+            const dt = (dtMax * s) / steps;
+            const v = (isTotal ? phys.C_QM : 0) + phys.deltaCI0 * Math.exp(-dt / state.tauStab);
+            if (s === 0) ctx.moveTo(toX(dt), toY(v));
+            else ctx.lineTo(toX(dt), toY(v));
+          }
+          ctx.stroke();
+        }
+
+        // Simulated experimental data points with ±1σ error bars
+        if (state.noiseEnabled) {
+          for (let i = 0; i < NUM_SIM_POINTS; i++) {
+            const dt = (dtMax * i) / (NUM_SIM_POINTS - 1);
+            const px = toX(dt);
+            const ev = evalCurves(phys, dt);
+
+            if (showM2) {
+              const yVal2 = (isTotal ? ev.C2 : ev.dC2) + state.noiseSamplesM2[i] * phys.sigmaC;
+              const py2 = toY(yVal2);
+              const py2Top = toY(yVal2 + phys.sigmaC);
+              const py2Bot = toY(yVal2 - phys.sigmaC);
+              ctx.strokeStyle = palette.m2;
+              ctx.lineWidth = 1.2;
+              ctx.beginPath();
+              ctx.moveTo(px, py2Top);
+              ctx.lineTo(px, py2Bot);
+              ctx.moveTo(px - 3, py2Top);
+              ctx.lineTo(px + 3, py2Top);
+              ctx.moveTo(px - 3, py2Bot);
+              ctx.lineTo(px + 3, py2Bot);
+              ctx.stroke();
+
+              ctx.fillStyle = palette.m2;
+              ctx.fillRect(px - 2.6, py2 - 2.6, 5.2, 5.2);
+            }
+
+            if (showM1) {
+              const yVal1 = (isTotal ? ev.C1 : ev.dC1) + state.noiseSamplesM1[i] * phys.sigmaC;
+              const py1 = toY(yVal1);
+              const py1Top = toY(yVal1 + phys.sigmaC);
+              const py1Bot = toY(yVal1 - phys.sigmaC);
+              ctx.strokeStyle = palette.m1;
+              ctx.lineWidth = 1.2;
+              ctx.beginPath();
+              ctx.moveTo(px, py1Top);
+              ctx.lineTo(px, py1Bot);
+              ctx.moveTo(px - 3, py1Top);
+              ctx.lineTo(px + 3, py1Top);
+              ctx.moveTo(px - 3, py1Bot);
+              ctx.lineTo(px + 3, py1Bot);
+              ctx.stroke();
+
+              ctx.beginPath();
+              ctx.arc(px, py1, isExport ? 4 : 3.1, 0, Math.PI * 2);
+              ctx.fillStyle = palette.m1;
+              ctx.fill();
+            }
+          }
+        }
+
+        // Interactive crosshair
+        if (!isExport && state.hoverX !== null && state.hoverX >= pad.left && state.hoverX <= pad.left + plotW) {
+          const dtHover = ((state.hoverX - pad.left) / plotW) * dtMax;
+          const ev = evalCurves(phys, dtHover);
+          ctx.strokeStyle = palette.crosshair;
+          ctx.lineWidth = 1;
+          ctx.setLineDash([4, 4]);
+          ctx.beginPath();
+          ctx.moveTo(state.hoverX, pad.top);
+          ctx.lineTo(state.hoverX, pad.top + plotH);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          if (showM1) {
+            const py1 = toY(isTotal ? ev.C1 : ev.dC1);
+            ctx.beginPath();
+            ctx.arc(state.hoverX, py1, 5, 0, Math.PI * 2);
+            ctx.fillStyle = palette.m1;
+            ctx.fill();
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+          }
+          if (showM2) {
+            const py2 = toY(isTotal ? ev.C2 : ev.dC2);
+            ctx.beginPath();
+            ctx.arc(state.hoverX, py2, 5, 0, Math.PI * 2);
+            ctx.fillStyle = palette.m2;
+            ctx.fill();
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+          }
+
+          els.hud.innerHTML =
+            `<div style="color:#94a3b8">Δt = <strong style="color:#f8fafc">${fmtTime(dtHover)}</strong></div>` +
+            `<div style="color:#94a3b8">C_QM = ${fmtFixed(phys.C_QM, 5)}</div>` +
+            (showM1 ? `<div style="color:#22d3ee">C_I(Δt)  = ${fmtFixed(ev.C1, 5)} (ΔC=${fmtFixed(ev.dC1, 5)})</div>` : '') +
+            (showM2 ? `<div style="color:#fbbf24">C_II(Δt) = ${fmtFixed(ev.C2, 5)} (ΔC=${fmtFixed(ev.dC2, 5)})</div>` : '');
+          els.hud.classList.add('visible');
+        } else if (!isExport) {
+          els.hud.classList.remove('visible');
+        }
+
+        ctx.restore();
+
+        // Export legend inside image
+        if (isExport) {
+          const lx = pad.left + plotW - 310;
+          const ly = pad.top + 18;
+          ctx.fillStyle = isLight ? 'rgba(248, 250, 252, 0.92)' : 'rgba(13, 18, 28, 0.92)';
+          ctx.strokeStyle = palette.grid;
+          ctx.lineWidth = 1;
+          drawRoundedRect(ctx, lx, ly, 294, 98, 6);
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.font = '13px ' + getComputedStyle(document.body).getPropertyValue('--font-sans');
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'middle';
+
+          const items = [
+            { label: dict.legQm, color: palette.qm, dashed: true },
+            { label: dict.legMode1, color: palette.m1, dashed: false },
+            { label: dict.legMode2, color: palette.m2, dashed: false },
+          ];
+          items.forEach((it, idx) => {
+            const iy = ly + 22 + idx * 26;
+            ctx.strokeStyle = it.color;
+            ctx.lineWidth = 2.5;
+            if (it.dashed) ctx.setLineDash([6, 4]);
+            ctx.beginPath();
+            ctx.moveTo(lx + 14, iy);
+            ctx.lineTo(lx + 44, iy);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.fillStyle = palette.text;
+            ctx.fillText(it.label, lx + 54, iy);
+          });
+        }
+      }
+
+      // =========================================================
+      // 8. Export Handlers (PNG & CSV)
+      // =========================================================
+      function exportPNG() {
+        const phys = computePhysics();
+        const off = document.createElement('canvas');
+        drawPlot(off, phys, state.pngTheme, true);
+        const url = off.toDataURL('image/png');
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `mzi-covariance-${state.platform}-${state.pngTheme}.png`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      }
+
+      function exportCSV() {
+        const phys = computePhysics();
+        const rows = [
+          `# MZI Weak-Measurement Covariance Simulation`,
+          `# Platform=${state.platform}, T0_ns=${state.T0}, tau_stab_ns=${state.tauStab}, phi_rad=${state.phi.toFixed(6)}, V=${state.V}, dx_over_sigma=${state.inverted ? -state.shift : state.shift}, dy_over_sigma=${state.shift}, eps_qbar=${state.epsQ}, N=${state.photons}, eta=${phys.eta.toFixed(6)}, C_QM=${phys.C_QM.toFixed(6)}, sigma_C=${phys.sigmaC.toFixed(6)}`,
+          `dt_ns,C_QM,C_I,C_II,DeltaC_I,DeltaC_II,sigma_C,C_I_sim,C_II_sim`
+        ];
+        for (let i = 0; i < NUM_SIM_POINTS; i++) {
+          const dt = (phys.dtMax * i) / (NUM_SIM_POINTS - 1);
+          const ev = evalCurves(phys, dt);
+          const sim1 = ev.C1 + (state.noiseEnabled ? state.noiseSamplesM1[i] * phys.sigmaC : 0);
+          const sim2 = ev.C2 + (state.noiseEnabled ? state.noiseSamplesM2[i] * phys.sigmaC : 0);
+          rows.push(
+            [
+              dt.toFixed(6),
+              phys.C_QM.toFixed(6),
+              ev.C1.toFixed(6),
+              ev.C2.toFixed(6),
+              ev.dC1.toFixed(6),
+              ev.dC2.toFixed(6),
+              phys.sigmaC.toFixed(6),
+              sim1.toFixed(6),
+              sim2.toFixed(6),
+            ].join(',')
+          );
+        }
+        const blob = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `mzi-covariance-${state.platform}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      // =========================================================
+      // 9. Event Listeners
+      // =========================================================
+      document.getElementById('lang-ru').addEventListener('click', () => {
+        state.lang = 'ru';
+        document.getElementById('lang-ru').classList.add('active');
+        document.getElementById('lang-en').classList.remove('active');
+        applyLanguage();
+      });
+
+      document.getElementById('lang-en').addEventListener('click', () => {
+        state.lang = 'en';
+        document.getElementById('lang-en').classList.add('active');
+        document.getElementById('lang-ru').classList.remove('active');
+        applyLanguage();
+      });
+
+      document.getElementById('png-dark').addEventListener('click', () => {
+        state.pngTheme = 'dark';
+        document.getElementById('png-dark').classList.add('active');
+        document.getElementById('png-light').classList.remove('active');
+      });
+
+      document.getElementById('png-light').addEventListener('click', () => {
+        state.pngTheme = 'light';
+        document.getElementById('png-light').classList.add('active');
+        document.getElementById('png-dark').classList.remove('active');
+      });
+
+      document.getElementById('btn-export-png').addEventListener('click', exportPNG);
+      document.getElementById('btn-export-csv').addEventListener('click', exportCSV);
+
+      // Platform presets
+      document.querySelectorAll('.preset-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.preset-btn').forEach((b) => b.classList.remove('active'));
+          btn.classList.add('active');
+          state.platform = btn.dataset.platform;
+          state.T0 = parseFloat(btn.dataset.t0);
+          els.ctrlT0.value = state.T0;
+
+          // Match realistic default tau_stab near T0 for chip vs bench
+          if (state.platform === 'si3n4') {
+            state.tauStab = 0.025;
+            els.ctrlTau.value = tauToSlider(state.tauStab);
+          } else if (state.platform === 'soi') {
+            state.tauStab = 0.15;
+            els.ctrlTau.value = tauToSlider(state.tauStab);
+          } else if (state.platform === '4f') {
+            state.tauStab = 3.0;
+            els.ctrlTau.value = tauToSlider(state.tauStab);
+          }
+          updateUI();
+        });
+      });
+
+      els.ctrlT0.addEventListener('input', (e) => {
+        state.T0 = parseFloat(e.target.value);
+        state.platform = 'custom';
+        document.querySelectorAll('.preset-btn').forEach((b) => b.classList.remove('active'));
+        updateUI();
+      });
+
+      els.ctrlTau.addEventListener('input', (e) => {
+        state.tauStab = sliderToTau(parseFloat(e.target.value));
+        updateUI();
+      });
+
+      els.ctrlEps.addEventListener('input', (e) => {
+        state.epsQ = parseFloat(e.target.value);
+        updateUI();
+      });
+
+      els.ctrlPhi.addEventListener('input', (e) => {
+        state.phi = parseFloat(e.target.value);
+        updateUI();
+      });
+
+      document.getElementById('btn-reset-phi').addEventListener('click', () => {
+        state.phi = Math.PI / 2;
+        els.ctrlPhi.value = state.phi;
+        updateUI();
+      });
+
+      els.ctrlVis.addEventListener('input', (e) => {
+        state.V = parseFloat(e.target.value);
+        updateUI();
+      });
+
+      els.ctrlShift.addEventListener('input', (e) => {
+        state.shift = parseFloat(e.target.value);
+        updateUI();
+      });
+
+      document.getElementById('inv-normal').addEventListener('click', () => {
+        state.inverted = false;
+        document.getElementById('inv-normal').classList.add('active-cyan');
+        document.getElementById('inv-flipped').classList.remove('active-cyan');
+        updateUI();
+      });
+
+      document.getElementById('inv-flipped').addEventListener('click', () => {
+        state.inverted = true;
+        document.getElementById('inv-flipped').classList.add('active-cyan');
+        document.getElementById('inv-normal').classList.remove('active-cyan');
+        updateUI();
+      });
+
+      function setMode(m) {
+        state.mode = m;
+        document.getElementById('mode-1').className = m === 'mode1' ? 'toggle-btn active-cyan' : 'toggle-btn';
+        document.getElementById('mode-2').className = m === 'mode2' ? 'toggle-btn active-amber' : 'toggle-btn';
+        document.getElementById('mode-both').className = m === 'both' ? 'toggle-btn active-emerald' : 'toggle-btn';
+        updateUI();
+      }
+      document.getElementById('mode-1').addEventListener('click', () => setMode('mode1'));
+      document.getElementById('mode-2').addEventListener('click', () => setMode('mode2'));
+      document.getElementById('mode-both').addEventListener('click', () => setMode('both'));
+
+      document.querySelectorAll('.sweep-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.sweep-btn').forEach((b) => b.classList.remove('active-cyan'));
+          btn.classList.add('active-cyan');
+          state.sweepSpan = btn.dataset.span;
+          updateUI();
+        });
+      });
+
+      els.ctrlNoise.addEventListener('change', (e) => {
+        state.noiseEnabled = e.target.checked;
+        updateUI();
+      });
+
+      document.getElementById('btn-resample').addEventListener('click', () => {
+        regenerateNoise();
+        updateUI();
+      });
+
+      els.ctrlN.addEventListener('input', (e) => {
+        state.photons = sliderToPhotons(parseFloat(e.target.value));
+        updateUI();
+      });
+
+      document.getElementById('view-total').addEventListener('click', () => {
+        state.plotView = 'total';
+        document.getElementById('view-total').classList.add('active');
+        document.getElementById('view-excess').classList.remove('active');
+        updateUI();
+      });
+
+      document.getElementById('view-excess').addEventListener('click', () => {
+        state.plotView = 'excess';
+        document.getElementById('view-excess').classList.add('active');
+        document.getElementById('view-total').classList.remove('active');
+        updateUI();
+      });
+
+      // Plot Crosshair Interaction
+      els.canvasPlot.addEventListener('mousemove', (e) => {
+        const rect = els.canvasPlot.getBoundingClientRect();
+        state.hoverX = e.clientX - rect.left;
+        state.hoverY = e.clientY - rect.top;
+        drawPlot(els.canvasPlot, computePhysics(), 'dark', false);
+      });
+
+      els.canvasPlot.addEventListener('mouseleave', () => {
+        state.hoverX = null;
+        state.hoverY = null;
+        els.hud.classList.remove('visible');
+        drawPlot(els.canvasPlot, computePhysics(), 'dark', false);
+      });
+
+      window.addEventListener('resize', () => {
+        updateUI();
+      });
+
+      // Photon pulse animation loop for schematic
+      function tick() {
+        if (!reducedMotion) {
+          state.pulsePhase = (state.pulsePhase + 0.0065) % 1;
+          drawSchematic(computePhysics());
+          requestAnimationFrame(tick);
+        }
+      }
+
+      // Initial render
+      els.ctrlTau.value = tauToSlider(state.tauStab);
+      applyLanguage();
+      if (!reducedMotion) {
+        requestAnimationFrame(tick);
+      }
+    })();
+  </script>
+</body>
+</html>
