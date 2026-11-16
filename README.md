@@ -66,14 +66,14 @@ Prior to final detection, phase-coherent evolutionary branches may temporarily c
 Протокол эксперимента описан в Основном препринте и включает две архитектуры:
 
 1. **Наносекундный диапазон ($\tau_{\mathrm{stab}} \gtrsim 2$ нс):** сбалансированный интерферометр Маха–Цендера в свободном пространстве с 4f-ретранслирующими телескопическими линиями задержки, наклонными стеклянными пластинами слабого сдвига $(\delta x, \delta y)$ и координатно-чувствительной 2D-SPAD-матрицей.
-2. **Пикосекундный диапазон ($\tau_{\mathrm{stab}} \sim 1\text{—}100$ пс):** многомодовый интегрально-фотонный интерферометр на чипе (Si<sub>3</sub>N<sub>4</sub> / SOI) с использованием ортогональных волноводных мод TE<sub>10</sub> и TE<sub>01</sub>.
+2. **Пикосекундный диапазон ($\tau_{\mathrm{stab}} \sim 1\text{–}100$ пс):** многомодовый интегрально-фотонный интерферометр на чипе (Si<sub>3</sub>N<sub>4</sub> / SOI) с использованием ортогональных волноводных мод TE<sub>10</sub> и TE<sub>01</sub>.
 
 The hypothesis leads to a falsifiable prediction: **transient second-order excess correlations $\Delta C(\Delta t) = C(\Delta t) - C_{\mathrm{QM}}(\varphi, V)$ between orthogonal transverse spatial pointers $(x, y)$ of a single photon prior to recombination at the output beam splitter BS<sub>2</sub>.**
 
 The experimental protocol is detailed in the Core Preprint across two platforms:
 
 1. **Nanosecond regime ($\tau_{\mathrm{stab}} \gtrsim 2$ ns):** a balanced free-space Mach–Zehnder interferometer featuring 4f-relayed optical delay lines, tilted plane-parallel glass plates for polarization-independent shifts $(\delta x, \delta y)$, and a position-sensitive 2D SPAD array.
-2. **Picosecond regime ($\tau_{\mathrm{stab}} \sim 1\text{—}100$ ps):** a multimode integrated-photonic chip MZI (Si<sub>3</sub>N<sub>4</sub> / SOI) utilizing orthogonal waveguide modes TE<sub>10</sub> and TE<sub>01</sub>.
+2. **Picosecond regime ($\tau_{\mathrm{stab}} \sim 1\text{–}100$ ps):** a multimode integrated-photonic chip MZI (Si<sub>3</sub>N<sub>4</sub> / SOI) utilizing orthogonal waveguide modes TE<sub>10</sub> and TE<sub>01</sub>.
 
 ---
 
