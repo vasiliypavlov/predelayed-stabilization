@@ -1,201 +1,231 @@
-# Отложенная стабилизация в квантовом измерении
+# Delayed Stabilization in Quantum Measurement
 
-## Феноменологическая гипотеза и интерферометрический тест
+## A Phenomenological Hypothesis and an Interferometric Test
 
-**Автор:** Василий Павлов (независимый исследователь)
+**Author:** Vasiliy Pavlov (Independent Researcher)
 
-## Аннотация
+---
 
-Предлагается феноменологическая гипотеза, согласно которой результат квантового измерения фиксируется не мгновенно, а формируется в ходе кратковременного процесса стабилизации конкурирующих фазово-согласованных эволюций с характерным временем $`\tau_{\mathrm{stab}}`$. В асимптотическом пределе завершённого измерения ($`t \gg \tau_{\mathrm{stab}}`$) модель полностью воспроизводит стандартную борновскую статистику. Однако на сверхкоротких временах до завершения стабилизации ($`t \lesssim \tau_{\mathrm{stab}}`$) могут наблюдаться переходные избыточные корреляции между альтернативными путями эволюции. Описывается реализуемый интерферометрический эксперимент со слабыми измерениями на одиночных фотонах и $`4f`$-ретрансляцией поперечных мод (для наносекундного диапазона), а также его интегрально-оптический многомодовый аналог (для пикосекундного диапазона), позволяющие отличить данную феноменологическую модель от стандартных квантовых траекторий, марковской декогеренции и моделей спонтанного коллапса.
+## Abstract
 
-## Дисклеймер
+We propose a phenomenological hypothesis according to which the outcome of a quantum measurement is not fixed instantaneously, but emerges through a brief stabilization process of competing phase-coherent evolutions with a characteristic timescale $`\tau_{\text{stab}}`$. In the asymptotic limit of a completed measurement ($`t \gg \tau_{\text{stab}}`$), the model reproduces standard Born statistics exactly. However, on ultrashort timescales prior to complete stabilization ($`t \lesssim \tau_{\text{stab}}`$), transient excess correlations between alternative evolutionary paths may be observed. We describe a feasible single-photon interferometric experiment employing weak measurements and $`4f`$ transverse-mode relay imaging (for the nanosecond regime), together with an integrated-photonic multimode counterpart (for the picosecond regime), enabling the model to be experimentally distinguished from standard quantum trajectories, Markovian decoherence, and objective collapse theories.
 
-Данная работа **не** предлагает новый фундаментальный формализм квантовой механики и полностью воспроизводит стандартную квантовую статистику в асимптотическом пределе завершённого измерения ($`t \gg \tau_{\mathrm{stab}}`$).
+---
 
-Рассматривается эффективная феноменологическая модель внутренней временной структуры фиксации результата на сверхкоротких масштабах времени ($`t \lesssim \tau_{\mathrm{stab}}`$), допускающая экспериментальную проверку в переходном режиме.
+## Disclaimer
 
-## 1. Введение
+This work does **not** propose a new fundamental formalism of quantum mechanics and fully reproduces standard quantum statistics in the asymptotic limit of a completed measurement ($`t \gg \tau_{\text{stab}}`$).
 
-Квантовая механика обеспечивает исключительно точные статистические предсказания, однако физическая динамика фиксации единичного результата измерения остаётся предметом интерпретационных дискуссий. В стандартных подходах переход к определённому исходу либо постулируется как мгновенный коллапс, либо связывается с марковской декогеренцией и отбором указательных состояний средой (einselection) \[4\], либо описывается как расхождение ветвей без выделенной стабилизации. В свою очередь, модели объективного коллапса (GRW, CSL) \[2, 3, 5\] вводят фундаментальные стохастические нелинейные поправки к эволюции, приводящие к спонтанной локализации независимо от акта регистрации.
+We consider an effective phenomenological model of the internal temporal structure of outcome fixation on ultrashort timescales ($`t \lesssim \tau_{\text{stab}}`$), allowing experimental testing in the transient regime.
 
-В данной работе рассматривается консервативная феноменологическая альтернатива: фиксация результата может происходить как конечный по времени процесс стабилизации конкурирующих фазово-согласованных эволюций. Модель не изменяет стандартную статистику финальных исходов в асимптотике завершённого измерения, но допускает наличие экспериментально проверяемой переходной структуры в промежуточном режиме до окончательной регистрации.
+---
 
-## 2. Феноменологическая гипотеза
+## 1. Introduction
 
-Рассматривается квантовая система $`S`$ в суперпозиции различимых путей, слабо связанная с пространственным указателем $`P`$ (поперечными степенями свободы $`(x, y)`$ самого фотона) в гильбертовом пространстве $`\mathcal{H}_S \otimes \mathcal{H}_P`$, для которой предполагается:
+Quantum mechanics provides extraordinarily accurate statistical predictions, yet the physical dynamics underlying the fixation of a single measurement outcome remain the subject of foundational debate. In standard approaches, the transition to a definite outcome is either postulated as an instantaneous collapse, attributed to Markovian decoherence and environment-induced superselection (einselection) [4], or treated as unitary branching without a distinct stabilization process. Conversely, objective collapse models (GRW, CSL) [2, 3, 5] introduce fundamental stochastic nonlinear modifications to the Schrödinger evolution, producing spontaneous localization independently of any registration event.
 
-1. До завершения процесса фиксации результата сосуществуют фазово-согласованные ветви эволюции, запутанные с поперечным указателем в момент $`t = 0`$ слабого сдвига.
+In this work, we examine a conservative phenomenological alternative: outcome fixation may occur as a finite-duration stabilization of competing phase-coherent evolutions. The model leaves the standard final-outcome statistics unaltered in the asymptotic limit of a completed measurement, while permitting an experimentally testable transient structure prior to final registration.
 
-2. В переходном окне $`t \lesssim \tau_{\mathrm{stab}}`$ (где $`t \ge 0`$ — полное время эволюции от момента установления слабой связи между путём и указателем) эти ветви демонстрируют слабые эффективные взаимные корреляции, обусловленные совместной динамикой системы, указателя и локальных квазирезервуаров мод окружения $`E_A \otimes E_B`$.
+---
 
-3. Фиксация наблюдаемого исхода соответствует динамической стабилизации одного согласованного ансамбля с характерным временем релаксации $`\tau_{\mathrm{stab}}`$, после чего при $`t \gg \tau_{\mathrm{stab}}`$ система возвращается на стандартную квантовую асимптотику.
+## 2. Phenomenological Hypothesis
 
-Асимметрия между исходами рассматривается как динамически возникающая в ходе стабилизации, а не как мгновенный вневременной скачок.
+Consider a quantum system $`S`$ in a superposition of distinguishable paths, weakly coupled to a spatial pointer $`P`$ (the transverse degrees of freedom $`(x, y)`$ of the photon itself) in the Hilbert space $`\mathcal{H}_S \otimes \mathcal{H}_P`$, for which we assume:
 
-Чтобы гарантировать математическую корректность эволюции, сохранение положительности матрицы плотности и строгое соблюдение принципа запрета сверхсветовой передачи сигнала (no-signaling), переходная немарковская динамика формулируется через явно заданное полностью положительное и сохраняющее след отображение (CPTP-канал) $`\Phi_t`$ в пространстве $`\mathcal{H}_S \otimes \mathcal{H}_P`$, порождаемое локальной унитарной эволюцией $`\hat{U}_{SPE}(t)`$ в расширенном пространстве с локальными континуумами вспомогательных мод (квазирезервуарами с конечным временем памяти $`\tau_{\mathrm{stab}}`$) $`E = E_A \otimes E_B`$ в начальном факторизованном состоянии $`\rho_E(0) = \rho_{E_A}(0) \otimes \rho_{E_B}(0)`$ (вакуумном $`|0\rangle\langle 0|`$ либо слабом когерентном/тепловом):
+1. Prior to completion of outcome fixation, phase-coherent evolutionary branches coexist, entangled with the transverse pointer at the weak-shift instant $`t = 0`$.
+2. Within the transient window $`t \lesssim \tau_{\text{stab}}`$ (where $`t \ge 0`$ denotes the total evolution time elapsed since the establishment of weak path–pointer coupling), these branches exhibit weak effective mutual correlations induced by the joint dynamics of the system, the pointer, and local quasi-reservoir environment modes $`E_A \otimes E_B`$.
+3. Fixation of the observed outcome corresponds to the dynamical stabilization of a single consistent ensemble over a characteristic relaxation time $`\tau_{\text{stab}}`$, after which, for $`t \gg \tau_{\text{stab}}`$, the system returns to standard quantum asymptotics.
 
-$$
-\rho_{SP}(t) = \Phi_t\bigl[\rho_{SP}(0)\bigr] = \mathrm{Tr}_E\!\left[\hat{U}_{SPE}(t)\bigl(\rho_{SP}(0) \otimes \rho_E(0)\bigr)\hat{U}_{SPE}^{\dagger}(t)\right] = \sum_{\alpha} \hat{K}_{\alpha}(t)\,\rho_{SP}(0)\,\hat{K}_{\alpha}^{\dagger}(t),
-$$
+The asymmetry between outcomes is thus treated as dynamically emerging during stabilization rather than as an instantaneous, timeless jump.
 
-где операторы Крауса удовлетворяют условию полноты $`\sum_{\alpha} \hat{K}_{\alpha}^{\dagger}(t)\hat{K}_{\alpha}(t) = \hat{I}_{SP}`$ при всех $`t \ge 0`$. Локальный оператор эволюции $`\hat{U}_{SPE}(t) = \mathcal{T}\exp\!\left(-\frac{i}{\hbar}\int_{0^-}^t \hat{H}_{SPE}(t')\,dt'\right)`$ генерируется локальной в каждом плече перекрёстно-фазовой связью на двумерном поперечном волновом пакете фотона:
-
-$$
-\hat{H}_{\mathrm{int}}(t) = \hat{\Pi}_A \otimes \frac{\hat{x}\hat{y}}{\sigma^2} \otimes g(t)\hat{Q}_A - \hat{\Pi}_B \otimes \frac{\hat{x}\hat{y}}{\sigma^2} \otimes g(t)\hat{Q}_B, \qquad g(t) = \hbar\epsilon\left(\delta(t) - \frac{1}{\tau_{\mathrm{stab}}}e^{-t/\tau_{\mathrm{stab}}}\right), \qquad \int_{0^-}^{\infty} g(t')\,dt' = 0,
-$$
-
-где $`\hat{\Pi}_{A,B}`$ — проекторы на плечи $`A`$ и $`B`$, $`\hat{Q}_{A,B} = \hat{I} + \hat{b}_{A,B}^\dagger\hat{b}_{A,B}`$ — локальные эрмитовы операторы резервуаров с нулевым коммутатором $`[\hat{H}_{E_{A,B}}, \hat{Q}_{A,B}] = 0`$ и ненулевыми средними $`\langle \hat{Q}_A \rangle_{E_A} = \langle \hat{Q}_B \rangle_{E_B} = \bar{q} \ge 1`$ ($`\bar{q} = 1`$ в вакуумном состоянии $`|0\rangle_{E_{A,B}}`$). Поскольку оператор $`\hat{x}\hat{y}/\sigma^2`$ не меняет плотность $`|\psi(x,y)|^2`$ в отдельном плече, калибровочный тест с одним заблокированным плечом строго даёт нулевой отклик. В то же время для когерентной суперпозиции путей в выходном порту $`D_{+}(\varphi)`$ безразмерный фазовый фактор $`\alpha(t) = \frac{1}{\hbar}\int_{0^-}^t g(t')\,dt' = \epsilon e^{-t/\tau_{\mathrm{stab}}}`$ порождает в интерференционной квадратуре ($`\sin\varphi`$) избыточную корреляцию первого порядка по $`\epsilon`$:
+To guarantee mathematical consistency, positivity preservation of the density matrix, and strict compliance with the no-signaling principle, the transient non-Markovian dynamics is formulated as an explicitly defined completely positive trace-preserving (CPTP) map $`\Phi_t`$ on $`\mathcal{H}_S \otimes \mathcal{H}_P`$, generated by a local unitary evolution $`\hat{U}_{SPE}(t)`$ in an extended space with local auxiliary mode continua (quasi-reservoirs with finite memory time $`\tau_{\text{stab}}`$) $`E = E_A \otimes E_B`$ prepared in an initial factorized state $`\rho_E(0) = \rho_{E_A}(0) \otimes \rho_{E_B}(0)`$ (either the vacuum $`|0\rangle\langle 0|`$ or a weak coherent/thermal state):
 
 $$
-\Delta C(\varphi, t) \approx -\frac{2V\eta\,\bar{q}\,\epsilon\,\sigma^2}{\delta x\,\delta y}\,\frac{\sin\varphi}{1 + V\eta\cos\varphi}\,e^{-t/\tau_{\mathrm{stab}}},
+\rho_{SP}(t) = \Phi_t\left[\rho_{SP}(0)\right] = \mathrm{Tr}_E\left[\hat{U}_{SPE}(t)\left(\rho_{SP}(0) \otimes \rho_E(0)\right)\hat{U}_{SPE}^{\dagger}(t)\right] = \sum_{\alpha} \hat{K}_{\alpha}(t)\,\rho_{SP}(0)\,\hat{K}_{\alpha}^{\dagger}(t),
 $$
 
-при сохранении интерференционной дуальности $`V^2 + D^2 \le 1`$ (потеря видности имеет второй порядок $`\delta V \sim O(\epsilon^2) \ll 1`$). В чистом вакууме $`|0\rangle_{E_{A,B}}`$ (являющемся собственным состоянием $`\hat{Q}_{A,B}`$ с нулевой дисперсией числа фотонов $`\sigma_Q^2 = 0`$) отображение $`\Phi_t`$ редуцируется к эффективному унитарному фазовому каналу; при выборе $`\rho_E(0)`$ как слабого когерентного или теплового состояния ($`\sigma_Q^2 > 0`$) система запутывается с квазирезервуаром на временах $`t \lesssim \tau_{\mathrm{stab}}`$, а условие $`\int_{0^-}^\infty g(t')\,dt' = 0`$ гарантирует полное распутывание при $`t \gg \tau_{\mathrm{stab}}`$ ($`\hat{U}_{SPE}(t) \to \hat{U}_{SP}(t)\otimes\hat{I}_E`$) и точный асимптотический выход на стандартную статистику Борна. После прохождения выходного светоделителя $`\mathrm{BS}_2`$ разность плечевых проекторов $`\hat{\Pi}_A - \hat{\Pi}_B`$ снимается, что фиксирует накопленное к моменту $`t = T_0`$ значение корреляции в Режиме II.
-
-Поскольку $`\Phi_t`$ является строго линейным локальным CPTP-каналом, действующим исключительно на подсистему $`A`$ составной системы $`AB`$, в силу теоремы о невозможности сверхсветовой сигнализации (теорема Гизина–Полчинского) для любого запутанного состояния $`\rho_{AB}(0)`$ и произвольной операции $`\Phi_t^{(A)} \otimes \mathcal{I}^{(B)}`$ выполняется тождество
+where the Kraus operators satisfy the completeness relation $`\sum_{\alpha} \hat{K}_{\alpha}^{\dagger}(t)\hat{K}_{\alpha}(t) = \hat{I}_{SP}`$ for all $`t \ge 0`$. The local evolution operator
 
 $$
-\mathrm{Tr}_A\!\left[\bigl(\Phi_t^{(A)} \otimes \mathcal{I}^{(B)}\bigr)\rho_{AB}(0)\right] = \mathrm{Tr}_A\!\left[\rho_{AB}(0)\right] = \rho_B(0),
+\hat{U}_{SPE}(t) = \mathcal{T}\exp\left(-\frac{i}{\hbar}\int_{0^-}^t \hat{H}_{SPE}(t')\,dt'\right)
 $$
 
-что строго исключает передачу сигнала на удалённую подсистему $`B`$ при всех временах $`t \ge 0`$, включая переходное окно $`t \lesssim \tau_{\mathrm{stab}}`$.
+is generated by an arm-local cross-phase coupling acting on the two-dimensional transverse wavepacket of the photon:
 
-## 3. Проверяемое следствие
+$$
+\hat{H}_{\text{int}}(t) = \hat{\Pi}_A \otimes \frac{\hat{x}\hat{y}}{\sigma^2} \otimes g(t)\hat{Q}_A - \hat{\Pi}_B \otimes \frac{\hat{x}\hat{y}}{\sigma^2} \otimes g(t)\hat{Q}_B,
+$$
 
-Если стабилизация результата занимает конечное время $`\tau_{\mathrm{stab}}`$, то в экспериментах, зондирующих систему до или в процессе завершения стабилизации, могут наблюдаться:
+$$
+g(t) = \hbar\epsilon\left(\delta(t) - \frac{1}{\tau_{\text{stab}}}e^{-t/\tau_{\text{stab}}}\right), \qquad \int_{0^-}^{\infty} g(t')\,dt' = 0,
+$$
 
-* слабые, но ненулевые избыточные корреляции между показаниями слабых датчиков, связанных с альтернативными путями;
+where $`\hat{\Pi}_{A,B}`$ are the projectors onto arms $`A`$ and $`B`$, and $`\hat{Q}_{A,B} = \hat{I} + \hat{b}_{A,B}^\dagger\hat{b}_{A,B}`$ are local Hermitian reservoir operators satisfying $`[\hat{H}_{E_{A,B}}, \hat{Q}_{A,B}] = 0`$ with non-zero expectation values $`\langle \hat{Q}_A \rangle_{E_A} = \langle \hat{Q}_B \rangle_{E_B} = \bar{q} \ge 1`$ ($`\bar{q} = 1`$ in the vacuum state $`|0\rangle_{E_{A,B}}`$). Because $`\hat{x}\hat{y}/\sigma^2`$ does not alter the spatial probability density $`|\psi(x,y)|^2`$ in a single arm, a calibration test with one arm blocked yields strictly zero response. Meanwhile, for a coherent path superposition at the output port $`D_{+}(\varphi)`$, the dimensionless phase factor
 
-* затухающая зависимость этих корреляций от управляемой добавочной задержки $`\Delta t`$ между областью слабого взаимодействия и выходным светоделителем;
+$$
+\alpha(t) = \frac{1}{\hbar}\int_{0^-}^t g(t')\,dt' = \epsilon e^{-t/\tau_{\text{stab}}}
+$$
 
-* исчезновение избыточных корреляций и выход на стандартную статистику при $`t \gg \tau_{\mathrm{stab}}`$.
+generates a first-order-in-$`\epsilon`$ excess correlation in the interference quadrature ($`\sin\varphi`$):
 
-Подобные переходные эффекты не возникают в моделях с мгновенной проекцией или чисто марковской релаксацией без дополнительной временной динамики стабилизации.
+$$
+\Delta C(\varphi, t) \approx -\frac{2V\eta\,\bar{q}\,\epsilon\,\sigma^2}{\delta x\,\delta y}\,\frac{\sin\varphi}{1 + V\eta\cos\varphi}\,e^{-t/\tau_{\text{stab}}},
+$$
 
-## 4. Предлагаемый эксперимент
+while preserving the interferometric duality relation $`V^2 + D^2 \le 1`$ (visibility reduction is second-order, $`\delta V \sim O(\epsilon^2) \ll 1`$). In the pure vacuum $`|0\rangle_{E_{A,B}}`$ (an eigenstate of $`\hat{Q}_{A,B}`$ with zero photon-number variance $`\sigma_Q^2 = 0`$), the map $`\Phi_t`$ reduces to an effective unitary phase channel; when $`\rho_E(0)`$ is chosen as a weak coherent or thermal state ($`\sigma_Q^2 > 0`$), genuine entanglement with the quasi-reservoir develops for $`t \lesssim \tau_{\text{stab}}`$, and the condition $`\int_{0^-}^\infty g(t')\,dt' = 0`$ guarantees complete disentanglement at $`t \gg \tau_{\text{stab}}`$ ($`\hat{U}_{SPE}(t) \to \hat{U}_{SP}(t)\otimes\hat{I}_E`$) and exact asymptotic recovery of standard Born statistics. Upon passing through the output beam splitter $`\text{BS}_2`$, the arm-projector difference $`\hat{\Pi}_A - \hat{\Pi}_B`$ ceases to act, freezing the correlation accumulated up to $`t = T_0`$ in Mode II.
 
-### 4.1 Система и режимы задержки
+Because $`\Phi_t`$ is a strictly linear local CPTP channel acting solely on subsystem $`A`$ of a bipartite system $`AB`$, the no-signaling theorem (Gisin–Polchinski theorem) implies that for any entangled state $`\rho_{AB}(0)`$ and any local operation $`\Phi_t^{(A)} \otimes \mathcal{I}^{(B)}`$,
 
-Рассматривается сбалансированный интерферометр Маха–Цендера (МЦИ) с источником одиночных фотонов, активной фазовой стабилизацией $`\varphi`$ и $`4f`$-ретранслирующими телескопическими линиями задержки в свободном пространстве.
+$$
+\mathrm{Tr}_A\left[\left(\Phi_t^{(A)} \otimes \mathcal{I}^{(B)}\right)\rho_{AB}(0)\right] = \mathrm{Tr}_A\left[\rho_{AB}(0)\right] = \rho_B(0),
+$$
 
-Использование $`4f`$-ретрансляции (конфокальных систем линз с единичным увеличением $`1:1`$) в оптических линиях задержки является принципиальным требованием протокола: обычное одномодовое оптическое волокно (SMF) поддерживает только основную моду $`\mathrm{LP}_{01}`$ и полностью стирает поперечные смещения $`(\delta x, \delta y)`$, тогда как свободное распространение на наносекундных масштабах ($`0.3\text{–}3\text{ м}`$) без $`4f`$-ретрансляции приводит к дифракционному уширению $`\sigma`$ пучка.
+strictly precluding superluminal signaling to the distant subsystem $`B`$ at all times $`t \ge 0`$, including inside the transient window $`t \lesssim \tau_{\text{stab}}`$.
 
-Отсчёт физического времени эволюции $`t`$ начинается в момент $`t = 0`$ прохождения фотоном пластин слабого сдвига, после чего суммарное время когерентного пролёта до выходного светоделителя $`\mathrm{BS}_2`$ составляет $`t = T_0 + \Delta t`$, где $`T_0 = L_0/c`$ — минимальное базовое время пролёта компактного контура длиной $`L_0`$, а $`\Delta t \ge 0`$ — управляемая добавочная оптическая задержка. В объёмном $`4f`$-стенде свободного пространства минимальная длина ретранслирующего контура составляет $`L_0 \gtrsim 0.6\text{–}1.0\text{ м}`$ ($`T_0 \gtrsim 2\text{–}3.3\text{ нс}`$), что обеспечивает условие $`T_0 \lesssim \tau_{\mathrm{stab}}`$ для тестирования наносекундного масштаба $`\tau_{\mathrm{stab}} \gtrsim 2\text{ нс}`$. Чтобы разделить физическую динамику стабилизации от аппаратных артефактов, протокол предусматривает два режима:
+---
 
-1. **Режим I — симметричная (балансная) задержка до выходного светоделителя (основной тест гипотезы):** равная управляемая добавочная задержка $`\Delta t`$ ($`\Delta t_A = \Delta t_B = \Delta t`$) вводится одновременно в оба плеча ($`A`$ и $`B`$) с помощью синхронизированных $`4f`$-линий задержки перед выходным светоделителем $`\mathrm{BS}_2`$ (при сохранении нулевой разности хода $`|\Delta L| \ll c\tau_{\mathrm{coh}}`$). В этом режиме полное время существования фазово-согласованной суперпозиции путей до рекомбинации на $`\mathrm{BS}_2`$ прямо варьируется как $`t = T_0 + \Delta t`$ при неизменной ширине моды $`\sigma = \mathrm{const}`$ и высокой видности интерференции $`V`$.
+## 3. Testable Consequence
 
-2. **Режим II — задержка после выходного светоделителя (нулевой контрольный тест, Null Control):** управляемый $`4f`$-тракт добавочной задержки $`\Delta t`$ располагается после выходного светоделителя $`\mathrm{BS}_2`$ перед координатно-чувствительным детектором (SPAD-матрицей). В этом режиме время пребывания фотона в суперпозиции путей до рекомбинации на $`\mathrm{BS}_2`$ фиксировано и равно минимальному базовому времени $`t = T_0`$ при любом значении $`\Delta t`$, поэтому гипотеза предсказывает отсутствие зависимости от $`\Delta t`$: $`\Delta C_{\mathrm{II}}(\Delta t) = \Delta C_{\mathrm{I}}(0) = \mathrm{const}(\Delta t)`$. Любой дрейф разностного приращения $`\delta_{\mathrm{II}}(\Delta t) = \Delta C_{\mathrm{II}}(\Delta t) - \Delta C_{\mathrm{II}}(0) \neq 0`$ служит прямым индикатором систематических аппаратных эффектов.
+If outcome stabilization occupies a finite duration $`\tau_{\text{stab}}`$, experiments probing the system prior to or during stabilization may reveal:
 
-### 4.2 Схема измерения
+- weak yet non-zero excess correlations between readings of weak pointers associated with alternative paths;
+- a decaying dependence of these correlations on the controllable additional delay $`\Delta t`$ inserted between the weak-interaction region and the output beam splitter;
+- disappearance of the excess correlations and convergence to standard quantum statistics for $`t \gg \tau_{\text{stab}}`$.
 
-Для одиночного фотона, находящегося в когерентной суперпозиции двух путей интерферометра, прямое проективное измерение информации о пути («which-path») неизбежно разрушает когерентную суперпозицию и подавляет интерференционную картину. Поэтому в схеме используется техника слабых измерений \[1, 6\], где роль независимых измерительных указателей (pointer states) играют две ортогональные поперечные пространственные координаты $`(x, y)`$ волнового пакета самого фотона.
+Such transient effects do not arise in models with instantaneous projection or purely Markovian relaxation without additional stabilization dynamics.
 
-Чтобы исключить паразитное запутывание поперечных координат $`(x, y)`$ с поляризацией фотона (которое возникает в двулучепреломляющих кристаллах из-за различия смещений $`o`$- и $`e`$-лучей и снижает видность интерференции), слабые пространственные сдвиги формируются поляризационно-независимыми элементами: в плече $`A`$ тонкая наклонная плоскопараллельная стеклянная пластина вводит малый поперечный сдвиг пучка $`\delta x`$ вдоль оси $`X`$, а в плече $`B`$ аналогичная пластина вводит ортогональный сдвиг $`\delta y`$ вдоль оси $`Y`$ (по аналогии со схемой слабых измерений поперечной координаты фотона \[6\]).
+---
 
-Слабость взаимодействия (сдвиги $`\delta x, \delta y \ll \sigma`$, где $`\sigma`$ — характерная ширина гауссовой моды пучка) гарантирует, что информация о пути передаётся в указатель лишь частично, сохраняя высокую видность интерференционной картины. После прохождения выбранного контура задержки $`\Delta t`$ и выходного светоделителя фотон регистрируется координатно-чувствительным однофотонным детектором (SPAD-матрицей), который в каждом постселектированном событии одновременно фиксирует пару координат $`(x, y)`$.
+## 4. Proposed Experiment
 
-### 4.3 Наблюдаемая величина и статистика фотонов
+### 4.1 System and Delay Regimes
 
-Пусть $`\phi_A(\Delta t) = x(\Delta t)/\delta x`$ и $`\phi_B(\Delta t) = y(\Delta t)/\delta y`$ — нормированные отклики ортогональных пространственных указателей, сопоставленных плечам $`A`$ и $`B`$, регистрируемые в каждом постселектированном однофотонном событии при управляемой задержке $`\Delta t`$. По ансамблю событий вычисляется двухточечная ковариационная функция второго порядка:
+We consider a balanced Mach–Zehnder interferometer (MZI) fed by a single-photon source, equipped with active phase stabilization $`\varphi`$ and free-space $`4f`$ optical relay delay lines.
+
+The use of $`4f`$ relay imaging (confocal lens systems with $`1:1`$ unit magnification) in the optical delay lines is an essential requirement of the protocol: conventional single-mode optical fiber (SMF) supports only the fundamental $`\text{LP}_{01}`$ mode and completely erases the transverse displacements $`(\delta x, \delta y)`$, whereas unguided free-space propagation over nanosecond path lengths ($`0.3\text{--}3\text{ m}`$) without $`4f`$ relaying induces diffractive broadening of the beam width $`\sigma`$.
+
+The physical evolution clock $`t`$ starts at $`t = 0`$ when the photon traverses the weak-shift plates, after which the total coherent flight time to the output beam splitter $`\text{BS}_2`$ is $`t = T_0 + \Delta t`$, where $`T_0 = L_0/c`$ is the minimum baseline flight time of the compact loop of length $`L_0`$, and $`\Delta t \ge 0`$ is the controllable additional optical delay. In a bulk free-space $`4f`$ bench, the minimum relay-loop length is $`L_0 \gtrsim 0.6\text{--}1.0\text{ m}`$ ($`T_0 \gtrsim 2\text{--}3.3\text{ ns}`$), satisfying $`T_0 \lesssim \tau_{\text{stab}}`$ for probing the nanosecond scale $`\tau_{\text{stab}} \gtrsim 2\text{ ns}`$. To separate genuine stabilization dynamics from instrumental artifacts, the protocol employs two operating modes:
+
+1. **Mode I — Symmetric (balanced) pre-$`\text{BS}_2`$ delay (primary hypothesis test):** an equal controllable delay $`\Delta t`$ ($`\Delta t_A = \Delta t_B = \Delta t`$) is introduced simultaneously into both arms ($`A`$ and $`B`$) using synchronized $`4f`$ delay lines ahead of the output beam splitter $`\text{BS}_2`$ (maintaining zero path-length mismatch $`|\Delta L| \ll c\tau_{\text{coh}}`$). Here the total lifetime of the phase-coherent path superposition prior to recombination at $`\text{BS}_2`$ is directly varied as $`t = T_0 + \Delta t`$ while keeping the mode width $`\sigma = \text{const}`$ and high interference visibility $`V`$.
+2. **Mode II — Post-$`\text{BS}_2`$ delay (Null Control):** the controllable $`4f`$ delay path $`\Delta t`$ is placed after the output beam splitter $`\text{BS}_2`$ ahead of the position-sensitive detector (SPAD array). In this mode, the photon's residence time in the path superposition prior to recombination at $`\text{BS}_2`$ is fixed at the minimum baseline time $`t = T_0`$ for all $`\Delta t`$, so the hypothesis predicts zero $`\Delta t`$-dependence: $`\Delta C_{\text{II}}(\Delta t) = \Delta C_{\text{I}}(0) = \text{const}(\Delta t)`$. Any drift in the differential increment $`\delta_{\text{II}}(\Delta t) = \Delta C_{\text{II}}(\Delta t) - \Delta C_{\text{II}}(0) \neq 0`$ serves as a direct diagnostic of systematic hardware effects.
+
+### 4.2 Measurement Scheme
+
+For a single photon in a coherent two-path superposition, a direct projective which-path measurement inevitably destroys coherence and suppresses the interference pattern. The setup therefore employs weak measurements [1, 6], in which two orthogonal transverse spatial coordinates $`(x, y)`$ of the photon's own wavepacket act as independent measurement pointers.
+
+To eliminate spurious entanglement between transverse coordinates $`(x, y)`$ and photon polarization (which arises in birefringent crystals due to differential walk-off of $`o`$- and $`e`$-rays and degrades interference visibility), the weak spatial shifts are implemented via polarization-independent elements: a thin tilted plane-parallel glass plate in arm $`A`$ introduces a small transverse beam shift $`\delta x`$ along the $`X`$-axis, while a matching plate in arm $`B`$ introduces an orthogonal shift $`\delta y`$ along the $`Y`$-axis (analogously to transverse-coordinate weak-measurement schemes [6]).
+
+The weakness of the coupling ($`\delta x, \delta y \ll \sigma`$, where $`\sigma`$ is the characteristic Gaussian beam width) ensures that only partial path information is transferred to the pointer, preserving high interference visibility. After traversing the selected delay loop $`\Delta t`$ and the output beam splitter, the photon is detected by a position-sensitive single-photon detector (SPAD array), which simultaneously records the coordinate pair $`(x, y)`$ in each postselected event.
+
+### 4.3 Observable and Photon Statistics
+
+Let $`\phi_A(\Delta t) = x(\Delta t)/\delta x`$ and $`\phi_B(\Delta t) = y(\Delta t)/\delta y`$ denote the normalized pointer readouts associated with arms $`A`$ and $`B`$, recorded for each postselected single-photon event at controllable delay $`\Delta t`$. Across the ensemble of events, we evaluate the second-order two-point covariance function:
 
 $$
 C(\Delta t) = \langle \phi_A(\Delta t)\phi_B(\Delta t) \rangle - \langle \phi_A(\Delta t) \rangle \langle \phi_B(\Delta t) \rangle.
 $$
 
-В стандартной квантовой оптике для сбалансированного интерферометра с относительной фазой $`\varphi`$ и видностью интерференции $`V \in [0, 1]`$ при слабом гауссовом сдвиге ($`\delta x, \delta y \ll \sigma`$) точное интегрирование по поперечному профилю пучка при постселекции в выходном порту $`D_{+}`$ даёт регуляризованную базовую ковариацию второго порядка, точную во всех порядках по параметрам $`\delta x/\sigma, \delta y/\sigma`$:
+In standard quantum optics, for a balanced interferometer with relative phase $`\varphi`$ and interference visibility $`V \in [0, 1]`$ under weak Gaussian shifts ($`\delta x, \delta y \ll \sigma`$), exact integration over the transverse beam profile upon postselection at output port $`D_{+}`$ yields the regularized baseline second-order covariance, exact to all orders in $`\delta x/\sigma`$ and $`\delta y/\sigma`$:
 
 $$
-C_{\mathrm{QM}}(\varphi, V) = -\frac{1}{4\left(1 + V\exp\!\left(-\frac{\delta x^2 + \delta y^2}{8\sigma^2}\right)\cos\varphi\right)},
+C_{\text{QM}}(\varphi, V) = -\frac{1}{4\left(1 + V\exp\left(-\frac{\delta x^2 + \delta y^2}{8\sigma^2}\right)\cos\varphi\right)},
 $$
 
-где экспоненциальный фактор перекрытия мод $`\eta = \exp\!\left(-(\delta x^2 + \delta y^2)/8\sigma^2\right) < 1`$ входит непосредственно в знаменатель через вероятность постселекции $`P_{+}`$, полностью устраняя формальную сингулярность вблизи тёмного порта ($`\varphi = \pi`$, $`V \to 1`$).
-
-Для максимизации избыточного сигнала $`\Delta C \propto \sin\varphi/(1 + V\eta\cos\varphi)`$ и одновременного исключения сингулярности тёмного порта рабочая точка интерферометра выбирается в области квадратурного сектора $`\varphi \in [\pi/4, \pi/2]`$ (с оптимумом сигнала в квадратуре $`\varphi = \pi/2`$) при активной фазовой стабилизации. Поскольку дисперсия однофотонной оценки произведения $`\phi_A \phi_B`$ масштабируется как $`\mathrm{Var}(\phi_A \phi_B) \approx (\sigma/\delta x)^2(\sigma/\delta y)^2`$, достижение статистической погрешности $`\delta C`$ требует набора статистики порядка $`N \sim (\sigma/\delta x)^4 (\delta C)^{-2}`$ постселектированных фотонов. Так, при $`\delta x/\sigma = \delta y/\sigma = 0.1`$ статистика $`N \sim 10^8`$ событий обеспечивает $`1\sigma`$-погрешность $`\delta C = 10^{-2}`$, тогда как для $`5\sigma`$-верификации сигнала амплитуды $`|\Delta C| \sim 10^{-2}`$ ($`\delta C \le 2 \times 10^{-3}`$) оптимально увеличение сдвига до $`\delta x/\sigma = \delta y/\sigma = 0.2`$, что снижает требуемую статистику в $`16`$ раз — с $`N \sim 2.5 \times 10^9`$ до $`N \approx 1.6 \times 10^8`$ событий на каждую точку задержки $`\Delta t`$ при сохранении высокого перекрытия мод ($`\eta \approx 0.990`$).
-
-Для выделения искомого переходного эффекта вводится дифференциальная наблюдаемая:
+where the exponential mode-overlap factor
 
 $$
-\Delta C(\Delta t) = C(\Delta t) - C_{\mathrm{QM}}(\varphi, V).
+\eta = \exp\left(-(\delta x^2 + \delta y^2)/8\sigma^2\right) < 1
 $$
 
-### 4.4 Предсказания
+enters directly into the denominator through the postselection probability $`P_{+}`$, completely eliminating the formal dark-port singularity near $`\varphi = \pi, V \to 1`$.
 
-* **Стандартная квантовая механика** (в приближении мгновенной редукции / марковской декогеренции): корреляция $`C(\Delta t)`$ не имеет собственной переходной динамики стабилизации и полностью описывается стандартным эволюционным оператором системы с учётом известных параметров декогеренции среды, так что $`\Delta C(\Delta t) \approx 0`$ во всём диапазоне задержек $`\Delta t \ge 0`$ в пределах статистической погрешности.
+To maximize the excess signal $`\Delta C \propto \sin\varphi/(1 + V\eta\cos\varphi)`$ while staying clear of the dark-port singularity, the interferometer operating point is locked within the quadrature sector $`\varphi \in [\pi/4, \pi/2]`$ (with signal optimum at quadrature $`\varphi = \pi/2`$) via active phase stabilization. Because the single-photon variance of the product $`\phi_A \phi_B`$ scales as $`\mathrm{Var}(\phi_A \phi_B) \approx (\sigma/\delta x)^2(\sigma/\delta y)^2`$, achieving statistical uncertainty $`\delta C`$ requires $`N \sim (\sigma/\delta x)^4 (\delta C)^{-2}`$ postselected photons. Thus, at $`\delta x/\sigma = \delta y/\sigma = 0.1`$, $`N \sim 10^8`$ events yield a $`1\sigma`$ uncertainty $`\delta C = 10^{-2}`$, whereas $`5\sigma`$ verification of a signal of amplitude $`|\Delta C| \sim 10^{-2}`$ ($`\delta C \le 2 \times 10^{-3}`$) is optimally achieved by increasing the shift to $`\delta x/\sigma = \delta y/\sigma = 0.2`$, reducing the required photon count by a factor of $`16`$ — from $`N \sim 2.5 \times 10^9`$ down to $`N \approx 1.6 \times 10^8`$ events per delay point $`\Delta t`$ while maintaining high mode overlap ($`\eta \approx 0.990`$).
 
-* **Гипотеза отложенной стабилизации:** на масштабах полного времени пролёта $`t = T_0 + \Delta t \lesssim \tau_{\mathrm{stab}}`$ в Режиме I наблюдаются избыточные переходные корреляции $`\Delta C_{\mathrm{I}}(\Delta t) \neq 0`$, затухающие по мере увеличения управляемой задержки $`\Delta t`$:
+To isolate the sought transient effect, we define the differential observable:
 
 $$
-\Delta C_{\mathrm{I}}(\Delta t) = \Delta C_{\mathrm{I}}(0)\exp\!\left(-\frac{\Delta t}{\tau_{\mathrm{stab}}}\right), \qquad \Delta C_{\mathrm{I}}(0) = \Delta C_0(\varphi)\exp\!\left(-\frac{T_0}{\tau_{\mathrm{stab}}}\right),
+\Delta C(\Delta t) = C(\Delta t) - C_{\text{QM}}(\varphi, V).
 $$
 
-где амплитуда $`\Delta C_0(\varphi) = -\frac{2V\eta\,\bar{q}\,\epsilon\,\sigma^2}{\delta x\,\delta y}\,\frac{\sin\varphi}{1+V\eta\cos\varphi}`$ достигает максимума в квадратуре $`\varphi = \pi/2`$ и строго согласована на границе $`\Delta t = 0`$ с нулевым контрольным тестом $`\Delta C_{\mathrm{II}}(\Delta t) \equiv \Delta C_{\mathrm{I}}(0)`$. Если базовая длина контура удовлетворяет условию $`T_0 \lesssim \tau_{\mathrm{stab}}`$, то при сканировании $`\Delta t`$ от $`0`$ до $`\Delta t \gg \tau_{\mathrm{stab}}`$ в Режиме I наблюдается переход от ненулевого плато $`\Delta C_{\mathrm{I}}(0)`$ к стандартной борновской асимптотике $`\Delta C_{\mathrm{I}}(\Delta t) \to 0`$, тогда как в Режиме II сигнал остаётся постоянным на уровне $`\Delta C_{\mathrm{II}}(\Delta t) \approx \Delta C_{\mathrm{I}}(0)`$. При $`\tau_{\mathrm{stab}} \ll T_0`$ амплитуда $`\Delta C_{\mathrm{I}}(0)`$ экспоненциально подавлена, что определяет нижнюю границу доступного для данного контура диапазона времён стабилизации.
+### 4.4 Predictions
 
-## 5. Отличие от стандартных квантовых траекторий, моделей коллапса и интерпретаций
+- **Standard Quantum Mechanics** (under instantaneous reduction / Markovian decoherence): the correlation $`C(\Delta t)`$ possesses no intrinsic transient stabilization dynamics and is completely described by the standard system evolution operator incorporating known environmental decoherence parameters, yielding $`\Delta C(\Delta t) \approx 0`$ across all $`\Delta t \ge 0`$ within statistical uncertainty.
+- **Delayed Stabilization Hypothesis:** on total flight timescales $`t = T_0 + \Delta t \lesssim \tau_{\text{stab}}`$ in Mode I, excess transient correlations $`\Delta C_{\text{I}}(\Delta t) \neq 0`$ appear and decay as the controllable delay $`\Delta t`$ increases:
 
-Принципиальная задача экспериментальной верификации состоит в том, чтобы отделить предсказываемый эффект от уже известных в квантовой оптике и теории открытых систем явлений — прежде всего от стандартных квантовых траекторий при слабых измерениях \[1, 6\], марковской декогеренции \[4\] и теорий объективного коллапса \[2, 3, 5\].
+$$
+\Delta C_{\text{I}}(\Delta t) = \Delta C_{\text{I}}(0)\exp\left(-\frac{\Delta t}{\tau_{\text{stab}}}\right), \qquad \Delta C_{\text{I}}(0) = \Delta C_0(\varphi)\exp\left(-\frac{T_0}{\tau_{\text{stab}}}\right),
+$$
 
-### 5.1 Стандартные квантовые траектории при слабых измерениях (AAV / Danan et al.)
+where the amplitude
 
-В формализме слабых значений Ааронова–Альберта–Вайдмана \[1\] и в экспериментах по реконструкции «слабого следа» фотона в интерферометрах (в частности, Данан и др. \[6\], где посредством частотного мультиплексирования колебаний зеркал измерялись модули слабых значений проекторов первого порядка $`|\langle \hat{\Pi}_j \rangle_w|`$) нетривиальные показания указателей возникают при совместной пре- и постселекции состояний строго в рамках стандартной линейной эволюции Шрёдингера.
+$$
+\Delta C_0(\varphi) = -\frac{2V\eta\,\bar{q}\,\epsilon\,\sigma^2}{\delta x\,\delta y}\,\frac{\sin\varphi}{1+V\eta\cos\varphi}
+$$
 
-Ключевое отличие предлагаемого теста состоит как в порядке измеряемого коррелятора, так и в его зависимости от управляемой задержки $`\Delta t`$:
+peaks at quadrature $`\varphi = \pi/2`$ and matches the Null Control test at $`\Delta t = 0`$: $`\Delta C_{\text{II}}(\Delta t) \equiv \Delta C_{\text{I}}(0)`$. Provided the baseline loop satisfies $`T_0 \lesssim \tau_{\text{stab}}`$, scanning $`\Delta t`$ from $`0`$ to $`\Delta t \gg \tau_{\text{stab}}`$ in Mode I reveals a crossover from the non-zero plateau $`\Delta C_{\text{I}}(0)`$ to the standard Born asymptote $`\Delta C_{\text{I}}(\Delta t) \to 0`$, whereas Mode II remains constant at $`\Delta C_{\text{II}}(\Delta t) \approx \Delta C_{\text{I}}(0)`$. For $`\tau_{\text{stab}} \ll T_0`$, the initial amplitude $`\Delta C_{\text{I}}(0)`$ is exponentially suppressed, setting the lower bound of the stabilization timescales accessible to a given loop.
 
-* В отличие от измерений первых моментов (средних смещений указателя) в \[6\], в настоящей схеме анализируется двухточечная ковариация второго порядка $`C(\Delta t) = \langle \phi_A(\Delta t)\phi_B(\Delta t) \rangle - \langle \phi_A(\Delta t) \rangle \langle \phi_B(\Delta t) \rangle`$ на ансамбле постселектированных одиночных фотонов. В стандартной квантовой механике её величина $`C_{\mathrm{QM}}(\varphi, V)`$ полностью определяется геометрией интерферометра, относительными фазами и выбором входного/выходного состояний; после завершения слабого взаимодействия удлинение симметричного $`4f`$-тракта задержки $`\Delta t`$ не меняет её структуру.
+---
 
-* В гипотезе отложенной стабилизации именно варьирование добавочной задержки $`\Delta t`$ выступает контрольным параметром: предсказывается переходная релаксация избыточной ковариации $`\Delta C_{\mathrm{I}}(\Delta t)`$ на характерном масштабе $`\tau_{\mathrm{stab}}`$, не сводящаяся к стационарной геометрии пре- и постселекции.
+## 5. Distinction from Standard Quantum Trajectories, Collapse Models, and Interpretations
 
-### 5.2 Квантовые траектории открытых систем, einselection и немарковские шумы
+A central experimental challenge is to distinguish the predicted effect from established phenomena in quantum optics and open quantum systems — specifically standard weak-measurement quantum trajectories [1, 6], Markovian decoherence [4], and objective collapse theories [2, 3, 5].
 
-В теории декогеренции и отбора указательных состояний (einselection) Зурека \[4\], а также в формализме условных квантовых траекторий, траектория отдельной реализации представляет собой метод разложения марковской динамики Линдблада для матрицы плотности $`\rho(t)`$. Такие траектории описывают монотонное подавление недиагональных элементов $`\rho_{AB}(t)`$ за счёт запутывания со средой, определяемое интенсивностью шума и потерями в оптических элементах.
+### 5.1 Standard Quantum Trajectories in Weak Measurements (AAV / Danan et al.)
 
-В реальном оптическом тракте необходимо также учитывать немарковскую декогеренцию (медленные фазовые дрейфы, температурные флуктуации и акустические вибрации с конечным временем корреляции $`\tau_{\mathrm{env}}`$), способную индуцировать зависящие от задержки $`\Delta t`$ корреляции в классическом ансамбле. Вклад как марковских, так и немарковских шумов среды изолируется посредством независимой шумовой калибровки установки (включая замеры при заблокированном одном из плеч, при вариации спектра вибраций, а также анализ разностного приращения $`\delta_{\mathrm{II}}(\Delta t) = \Delta C_{\mathrm{II}}(\Delta t) - \Delta C_{\mathrm{II}}(0)`$ в Режиме II, не затрагивающего потенциально ненулевое базовое плато $`\Delta C_{\mathrm{II}}(0) = \Delta C_{\mathrm{I}}(0)`$) и учитывается в базовой модели $`C_{\mathrm{QM}}(\varphi, V)`$, тогда как $`\Delta C_{\mathrm{I}}(\Delta t)`$ тестирует именно наличие собственного переходного окна стабилизации $`\tau_{\mathrm{stab}}`$.
+In the Aharonov–Albert–Vaidman (AAV) weak-value formalism [1] and experiments reconstructing the "weak trace" of a photon inside interferometers (notably Danan et al. [6], where frequency-multiplexed mirror oscillations measured first-order projector weak-value moduli $`|\langle \hat{\Pi}_j \rangle_w|`$), non-trivial pointer readings arise under combined pre- and postselection strictly within standard linear Schrödinger evolution.
 
-### 5.3 Модели объективного спонтанного коллапса (GRW / CSL)
+The proposed test differs fundamentally both in the order of the measured correlator and in its dependence on controllable delay $`\Delta t`$:
 
-Теории спонтанной локализации — модель Джирарди–Римини–Вебера (GRW) \[2\], модель непрерывной спонтанной локализации Пирла (CSL) \[3\] и их современные обобщения \[5\] — вводят фундаментальную нелинейную стохастическую модификацию уравнения Шрёдингера с универсальными константами (скорость локализации $`\lambda`$ и характерный масштаб $`r_C`$), усиливающуюся пропорционально массе или числу частиц. В результате модели GRW/CSL предсказывают необратимое подавление интерференции и аномальный нагрев даже в свободном пространстве без измерительного прибора.
+- Unlike first-moment measurements (mean pointer shifts) in [6], the present scheme analyzes the second-order two-point covariance $`C(\Delta t) = \langle \phi_A(\Delta t)\phi_B(\Delta t) \rangle - \langle \phi_A(\Delta t) \rangle \langle \phi_B(\Delta t) \rangle`$ over an ensemble of postselected single photons. In standard quantum mechanics, $`C_{\text{QM}}(\varphi, V)`$ is completely fixed by the interferometer geometry, relative phases, and pre-/postselected states; once the weak interaction is complete, extending a symmetric $`4f`$ delay path $`\Delta t`$ leaves its structure unchanged.
+- Under the delayed stabilization hypothesis, varying the additional delay $`\Delta t`$ serves directly as the control parameter: transient relaxation of the excess covariance $`\Delta C_{\text{I}}(\Delta t)`$ is predicted on the characteristic scale $`\tau_{\text{stab}}`$, irreducible to static pre-/postselection geometry.
 
-Предлагаемая гипотеза принципиально отличается от GRW/CSL:
+### 5.2 Open-System Quantum Trajectories, Einselection, and Non-Markovian Noise
 
-* Она не вводит массозависимого спонтанного коллапса при свободном распространении одиночного фотона.
+In Zurek's decoherence and einselection program [4], as well as in quantum trajectory unravellings, an individual trajectory represents a stochastic decomposition of Markovian Lindblad dynamics for the density operator $`\rho(t)`$. Such trajectories describe monotonic suppression of off-diagonal coherences $`\rho_{AB}(t)`$ via environmental entanglement governed by noise strength and optical losses.
 
-* Она не предсказывает перманентной потери видности интерференции или отклонений от правила Борна в асимптотике завершённого измерения ($`t \gg \tau_{\mathrm{stab}}`$).
+In a realistic optical setup, non-Markovian decoherence (slow phase drifts, thermal fluctuations, and acoustic vibrations with finite correlation time $`\tau_{\text{env}}`$) must also be accounted for, as it can induce $`\Delta t`$-dependent correlations in the classical ensemble. Contributions from both Markovian and non-Markovian environmental noise are isolated via independent noise calibration (including single-arm-blocked measurements, vibration-spectrum sweeps, and inspection of the differential Mode-II increment $`\delta_{\text{II}}(\Delta t) = \Delta C_{\text{II}}(\Delta t) - \Delta C_{\text{II}}(0)`$, which leaves any non-zero baseline plateau $`\Delta C_{\text{II}}(0) = \Delta C_{\text{I}}(0)`$ intact) and incorporated into the baseline model $`C_{\text{QM}}(\varphi, V)`$, ensuring that $`\Delta C_{\text{I}}(\Delta t)`$ specifically probes an intrinsic stabilization window $`\tau_{\text{stab}}`$.
 
-* Все проверяемые отличия локализованы исключительно в переходном временном окне $`t \lesssim \tau_{\mathrm{stab}}`$, сопровождающем процесс измерения.
+### 5.3 Objective Spontaneous Collapse Models (GRW / CSL)
 
-### 5.4 Связь с базовыми интерпретациями квантовой механики
+Spontaneous localization theories — the Ghirardi–Rimini–Weber (GRW) model [2], Pearle's Continuous Spontaneous Localization (CSL) model [3], and modern generalizations [5] — introduce a fundamental nonlinear stochastic modification of the Schrödinger equation governed by universal constants (localization rate $`\lambda`$ and correlation scale $`r_C`$), scaling with particle mass or number. Consequently, GRW/CSL predict irreversible interference loss and anomalous heating even during free propagation without a measuring apparatus.
 
-* **Копенгагенская интерпретация:** постулирует феноменологически мгновенную редукцию состояния без внутренней временной динамики.
+The present hypothesis differs sharply from GRW/CSL:
 
-* **Подходы декогеренции:** описывают подавление когерентности за счёт взаимодействия со средой \[4\], не вводя отдельного механизма динамической стабилизации единичного исхода.
+- It introduces no mass-dependent spontaneous collapse during free single-photon propagation.
+- It predicts no permanent visibility loss or deviations from Born's rule in the completed-measurement asymptote ($`t \gg \tau_{\text{stab}}`$).
+- All testable departures are strictly confined to the transient measurement window $`t \lesssim \tau_{\text{stab}}`$.
 
-* **Многомировая интерпретация:** предполагает унитарное расхождение ветвей без выделенного процесса стабилизации одной из них.
+### 5.4 Relation to Standard Interpretations of Quantum Mechanics
 
-Предлагаемая гипотеза отличается явным введением конечного по времени феноменологического окна стабилизации $`\tau_{\mathrm{stab}}`$, доступного для экспериментальной проверки в переходном режиме.
+- **Copenhagen Interpretation:** postulates a phenomenologically instantaneous state reduction with no internal temporal dynamics.
+- **Decoherence Approaches:** describe coherence suppression via system–environment coupling [4] without introducing a dedicated dynamical stabilization mechanism for individual outcomes.
+- **Many-Worlds Interpretation:** assumes purely unitary branching without a privileged stabilization process selecting one branch.
 
-## 6. Область применимости и ограничения
+The proposed hypothesis is distinguished by explicitly postulating a finite-duration phenomenological stabilization window $`\tau_{\text{stab}}`$, accessible to experimental scrutiny in the transient regime.
 
-Гипотеза является феноменологической и строго фальсифицируемой:
+---
 
-* **Масштаб времени** $`\tau_{\mathrm{stab}}`$ **и выбор оптической архитектуры:** характерное время стабилизации рассматривается как свободный феноменологический параметр, причём минимальное базовое время пролёта контура $`T_0`$ задаёт нижнюю границу доступного для сканирования диапазона ($`\tau_{\mathrm{stab}} \gtrsim T_0`$, поскольку при $`\tau_{\mathrm{stab}} \ll T_0`$ амплитуда $`\Delta C_{\mathrm{I}}(0) = \Delta C_0(\varphi) \exp(-T_0/\tau_{\mathrm{stab}})`$ экспоненциально подавлена). Объёмный $`4f`$-ретранслирующий интерферометр свободного пространства с $`L_0 \gtrsim 0.6\text{–}1.0\text{ м}`$ ($`T_0 = L_0/c \gtrsim 2\text{–}3.3\text{ нс}`$) позволяет непосредственно тестировать и ограничивать наносекундный диапазон $`\tau_{\mathrm{stab}} \gtrsim 2\text{ нс}`$. Для экспериментального доступа к пикосекундному и субпикосекундному диапазонам ($`\tau_{\mathrm{stab}} \sim 1\text{–}100\text{ пс}`$) требуется интегрально-фотонная (волноводно-чиповая) реализация МЦИ, где время пролёта определяется групповым показателем преломления $`T_0 = n_g L_0 / c`$ ($`n_g \approx 1.5\text{–}3.8`$; например, в нитриде кремния при $`L_0 \sim 200\text{ мкм–}1\text{ см}`$ достигается $`T_0 \sim 1.3\text{–}65\text{ пс}`$, тогда как в кремнии при $`L_0 = 1\text{ см}`$ — $`T_0 \approx 127\text{ пс}`$). В интегрально-оптической версии непрерывный $`2\mathrm{D}`$-указатель $`(x, y)`$ заменяется на две ортогональные волноводные моды — $`\mathrm{TE}_{10}`$ (в плече $`A`$) и $`\mathrm{TE}_{01}`$ (в плече $`B`$) в квадратном/3D-волноводе с учётом межмодовой дисперсии $`\Delta\beta_{mn}`$, а на выходе чипа используется 4-квадрантный модовый смеситель (проекция в суперпозиционный базис квадрантов) либо вывод излучения из торца волновода на координатно-чувствительную $`2\mathrm{D}`$-SPAD-матрицу (что исключает взаимоисключающие одномодовые срабатывания и позволяет регистрировать одновременную ковариацию $`\langle\phi_A\phi_B\rangle`$ в каждом однофотонном событии), тогда как сканирование $`\Delta t`$ реализуется на массиве сбалансированных чиповых МЦИ с фиксированными ступенями длины плеч.
+## 6. Domain of Applicability and Limitations
 
-* **Контроль систематических эффектов:** для исключения технических артефактов (механических дрейфов, неидеальности светоделителей, аберраций $`4f`$-линз и паразитных поперечных искажений пучка) необходимы контрольные тесты: сравнение Режима I с разностным приращением $`\delta_{\mathrm{II}}(\Delta t)`$ в Режиме II, инверсия знака слабого возмущения при активной перезахватывающей стабилизации рабочей фазы $`\varphi`$ (при этом *совместная* инверсия знака сдвигов $`\delta x \to -\delta x, \delta y \to -\delta y`$ сохраняет знак произведения $`\delta x \delta y`$, оставляя $`C_{\mathrm{QM}}`$ и $`\Delta C_0(\varphi)`$ инвариантными, тогда как *одноосевая* инверсия $`\delta x \to -\delta x`$ при фиксированном $`+\delta y`$ меняет знак избыточной поправки $`\Delta C_0(\varphi)`$ на фоне неизменного базового уровня $`C_{\mathrm{QM}}`$, предоставляя чистый дифференциальный диагностический признак), варьирование силы связи, а также калибровка в режиме разрушенной интерференции.
+The hypothesis is phenomenological and strictly falsifiable:
 
-* **Критерий фальсификации:** отсутствие статистически значимого избыточного сигнала $`\Delta C_{\mathrm{I}}(\Delta t)`$ во всём доступном диапазоне задержек $`t = T_0 + \Delta t \ge T_0`$ и при заданной чувствительности слабых измерений опровергает предложенный механизм в интервале масштабов $`\tau_{\mathrm{stab}} \gtrsim T_0`$ (устанавливая верхнюю границу $`\tau_{\mathrm{stab}} < T_0`$ для данной установки).
+- **Timescale $`\tau_{\text{stab}}`$ and Optical Architecture:** the stabilization time is treated as a free phenomenological parameter, with the minimum baseline loop transit time $`T_0`$ setting the lower boundary of the scannable range ($`\tau_{\text{stab}} \gtrsim T_0`$, since for $`\tau_{\text{stab}} \ll T_0`$ the amplitude $`\Delta C_{\text{I}}(0) = \Delta C_0(\varphi)\exp(-T_0/\tau_{\text{stab}})`$ is exponentially suppressed). A free-space bulk $`4f`$ relay interferometer with $`L_0 \gtrsim 0.6\text{--}1.0\text{ m}`$ ($`T_0 = L_0/c \gtrsim 2\text{--}3.3\text{ ns}`$) directly probes and constrains the nanosecond regime $`\tau_{\text{stab}} \gtrsim 2\text{ ns}`$. Accessing the picosecond and sub-picosecond regimes ($`\tau_{\text{stab}} \sim 1\text{--}100\text{ ps}`$) requires an integrated-photonic (waveguide-chip) MZI, where the transit time is governed by the group refractive index $`T_0 = n_g L_0 / c`$ ($`n_g \approx 1.5\text{--}3.8`$; e.g., silicon nitride with $`L_0 \sim 200\text{ }\mu\text{m--}1\text{ cm}`$ yields $`T_0 \sim 1.3\text{--}65\text{ ps}`$, while silicon with $`L_0 = 1\text{ cm}`$ yields $`T_0 \approx 127\text{ ps}`$). In the integrated-optic implementation, the continuous $`2\text{D}`$ pointer $`(x, y)`$ is replaced by two orthogonal waveguide modes — $`\text{TE}_{10}`$ (in arm $`A`$) and $`\text{TE}_{01}`$ (in arm $`B`$) in a square/3D waveguide accounting for intermodal dispersion $`\Delta\beta_{mn}`$ — and the chip output employs either a 4-quadrant mode mixer (projecting onto a quadrant superposition basis) or direct end-facet out-coupling onto a position-sensitive $`2\text{D}`$ SPAD array (preventing mutually exclusive single-mode clicks and enabling simultaneous $`\langle\phi_A\phi_B\rangle`$ covariance acquisition per single-photon event), while $`\Delta t`$ scanning is realized across an array of balanced chip MZIs with stepped arm lengths.
+- **Control of Systematic Effects:** to rule out technical artifacts (mechanical drift, beam-splitter imperfections, $`4f`$-lens aberrations, and parasitic transverse beam distortions), the protocol requires comparing Mode I against the differential Mode-II increment $`\delta_{\text{II}}(\Delta t)`$, inverting the sign of the weak perturbation under active re-locking of the operating phase $`\varphi`$ (noting that *joint* sign inversion $`\delta x \to -\delta x, \delta y \to -\delta y`$ preserves the sign of $`\delta x\,\delta y`$, leaving both $`C_{\text{QM}}`$ and $`\Delta C_0(\varphi)`$ invariant, whereas *single-axis* inversion $`\delta x \to -\delta x`$ at fixed $`+\delta y`$ flips the sign of the excess term $`\Delta C_0(\varphi)`$ atop an unchanged baseline $`C_{\text{QM}}`$, providing a clean differential diagnostic signature), varying the coupling strength, and calibrating under destroyed interference.
+- **Falsification Criterion:** the absence of a statistically significant excess signal $`\Delta C_{\text{I}}(\Delta t)`$ across the accessible delay range $`t = T_0 + \Delta t \ge T_0`$ at the target weak-measurement sensitivity refutes the proposed mechanism over the scale interval $`\tau_{\text{stab}} \gtrsim T_0`$ (establishing an upper bound $`\tau_{\text{stab}} < T_0`$ for that apparatus).
 
-## 7. Заключение
+---
 
-Результаты квантовых измерений могут формироваться в ходе кратковременного процесса стабилизации конкурирующих фазово-согласованных эволюций на масштабе времени $`\tau_{\mathrm{stab}}`$. Использование $`4f`$-ретранслирующего интерферометра Маха–Цендера со слабыми измерениями на двумерных поперечных пространственных степенях свободы $`(\delta x, \delta y)`$ одиночных фотонов (в наносекундном диапазоне) и многомодовых интегрально-оптических интерферометров (в пикосекундном диапазоне) предоставляет конкретный, экспериментально реализуемый способ отделить предсказываемую переходную динамику от стандартных квантовых траекторий, марковской декогеренции и моделей спонтанного коллапса — либо установить строгие экспериментальные ограничения на $`\tau_{\mathrm{stab}}`$.
+## 7. Conclusion
 
-## Список литературы
+Quantum measurement outcomes may emerge through a brief stabilization process of competing phase-coherent evolutions on a timescale $`\tau_{\text{stab}}`$. A $`4f`$-relayed Mach–Zehnder interferometer implementing weak measurements on two-dimensional transverse spatial degrees of freedom $`(\delta x, \delta y)`$ of single photons (in the nanosecond regime) together with multimode integrated-photonic interferometers (in the picosecond regime) provides a concrete, experimentally realizable protocol to separate the predicted transient dynamics from standard quantum trajectories, Markovian decoherence, and spontaneous collapse models — or to place stringent experimental bounds on $`\tau_{\text{stab}}`$.
+
+---
+
+## References
 
 1. Aharonov Y., Albert D. Z., Vaidman L. How the result of a measurement of a component of the spin of a spin-1/2 particle can turn out to be 100 // *Physical Review Letters*. — 1988. — Vol. 60, No. 14. — P. 1351–1354. — DOI: `10.1103/PhysRevLett.60.1351`.
-
 2. Ghirardi G. C., Rimini A., Weber T. Unified dynamics for microscopic and macroscopic systems // *Physical Review D*. — 1986. — Vol. 34, No. 2. — P. 470–491. — DOI: `10.1103/PhysRevD.34.470`.
-
 3. Pearle P. Combining stochastic dynamical state-vector reduction with spontaneous localization // *Physical Review A*. — 1989. — Vol. 39, No. 5. — P. 2277–2289. — DOI: `10.1103/PhysRevA.39.2277`.
-
 4. Zurek W. H. Decoherence, einselection, and the quantum origins of the classical // *Reviews of Modern Physics*. — 2003. — Vol. 75, No. 3. — P. 715–775. — arXiv: `quant-ph/0105127`.
-
 5. Bassi A., Lochan K., Satin S., Singh T. P., Ulbricht H. Models of wave-function collapse, underlying theories, and experimental tests // *Reviews of Modern Physics*. — 2013. — Vol. 85, No. 2. — P. 471–527. — arXiv: `1204.4325`.
-
 6. Danan A., Farfurnik D., Bar-Ad S., Vaidman L. Asking photons where they have been // *Physical Review Letters*. — 2013. — Vol. 111, No. 24. — P. 240402. — arXiv: `1304.7469`.
